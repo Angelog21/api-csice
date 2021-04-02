@@ -15,6 +15,10 @@ class CreateServiceRequestsTable extends Migration
     {
         Schema::create('service_requests', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('service_id')->constrained();
+            $table->float('price');
+            $table->integer('quantity');
             $table->timestamps();
         });
     }
