@@ -17,6 +17,7 @@ class CreateServicesTable extends Migration
             $table->id();
             $table->string("name");
             $table->string("code");
+            $table->float("petro_quantity");
             $table->timestamps();
         });
     }

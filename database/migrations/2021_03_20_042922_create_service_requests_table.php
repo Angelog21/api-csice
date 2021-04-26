@@ -19,6 +19,7 @@ class CreateServiceRequestsTable extends Migration
             $table->foreignId('service_id')->constrained();
             $table->float('price');
             $table->integer('quantity');
+            $table->string('status')->default("pendiente");
             $table->timestamps();
         });
     }

@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceRequest extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "user_id",
+        "service_id",
+        "price",
+        "quantity",
+        "status"
+    ];
 }
