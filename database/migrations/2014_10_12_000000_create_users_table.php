@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('rif');
             $table->string('social_reason');
             $table->string('direction');
+            $table->string('confirmation_code')->nullable();
             $table->timestamp('last_connection')->nullable();
             $table->string('password');
             $table->timestamp('email_verified_at')->nullable();

@@ -7,7 +7,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ApiResponser;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -16,26 +19,19 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try {
-            $attr = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|unique:users,email',
-                'password' => 'required|string|min:6',
-                'password_confirm' => 'required|string|min:6',
-                'rif' => 'required|string',
-                'social_reason' => 'required|string',
-                'direction' => 'required|string',
-                'phone' => 'required|string'
-            ]);
+            $attr = $request->all();
             
             if(!isset($request->role)){
-                $role = 4;
+                $attr["role"] = 4;
             }else{
-                $role = $request->role;
+                $attr["role"] = $request->role;
             }
 
             if(User::where('email',$attr["email"])->exists()){
                 return $this->error("Usuario ya existe",400,[]);
             }
+
+            $attr["confirmation_code"] = Str::random(35);
     
             $user = User::create([
                 'name' => $attr['name'],
@@ -45,10 +41,15 @@ class AuthController extends Controller
                 'direction' => $attr['direction'],
                 'password' => bcrypt($attr['password']),
                 'email' => $attr['email'],
-                'role_id' => $role
+                'role_id' => $attr["role"],
+                'confirmation_code'=>$attr["confirmation_code"]
             ]);
+
+            Mail::send('emails.confirmation_code', $attr, function($message) use ($attr) {
+                $message->to($attr['email'], $attr['name'])->subject('Por favor confirma tu correo');
+            });
     
-            return $this->success(["user"=>$user],"Usuario registrado correctamente");
+            return $this->success(["user"=>$user],"Usuario registrado correctamente debe verificar.");
         } catch (\Exception $e) {
             return $this->error($e->message,500,$e);
         }
@@ -74,6 +75,20 @@ class AuthController extends Controller
             "error"=>true,
             "message"=>"Error, credenciales no válidas"
         ]);
+    }
+
+    public function verify($code)
+    {
+        $user = User::where('confirmation_code', $code)->first();
+
+        if (!$user)
+            return $this->error("No se encontró el user",404,["success"=>false]);
+
+        $user->email_verified_at = Carbon::now();
+        $user->confirmation_code = null;
+        $user->save();
+
+        return $this->success(["success"=>true],"Verificado Correctamente");
     }
 
     public function logout(){
