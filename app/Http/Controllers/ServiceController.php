@@ -43,6 +43,7 @@ class ServiceController extends Controller
 
         $service = Service::create([
             'name'=>$request->name,
+            'unit'=>$request->unit,
             'code'=>$request->code,
             'petro_quantity'=>$request->petro_quantity
         ]);

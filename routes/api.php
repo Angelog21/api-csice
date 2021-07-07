@@ -29,4 +29,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/services/{id}','ServiceController@destroy');
 
     //-----------------------SOLICITUD DE SERVICIOS------------------
+    Route::post('/service-request','ServiceRequestController@store');
 });

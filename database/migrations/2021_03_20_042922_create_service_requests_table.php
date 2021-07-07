@@ -18,8 +18,11 @@ class CreateServiceRequestsTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('service_id')->constrained();
             $table->float('price');
+            $table->float('iva');
+            $table->float('total');
             $table->integer('quantity');
-            $table->string('status')->default("pendiente");
+            $table->string('status')->default("Creado");
+            $table->timestamp('responsed_at')->nullable();
             $table->timestamps();
         });
     }
