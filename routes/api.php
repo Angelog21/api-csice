@@ -30,4 +30,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //-----------------------SOLICITUD DE SERVICIOS------------------
     Route::post('/service-request','ServiceRequestController@store');
+    Route::get('/requests/me','ServiceRequestController@myRequests');
+    Route::get('/requests/pending','ServiceRequestController@requestByResponse');
 });

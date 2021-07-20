@@ -14,4 +14,8 @@ class Service extends Model
         "name",
         "petro_quantity"
     ];
+
+    public function serviceRequests() {
+        return $this->hasMany(ServiceRequest::class);
+    }
 }

@@ -13,7 +13,13 @@ class ServiceRequest extends Model
         "user_id",
         "service_id",
         "price",
+        "iva",
+        "total",
         "quantity",
         "status"
     ];
+
+    public function service() {
+        return $this->belongsTo(Service::class,'service_id');
+    }
 }

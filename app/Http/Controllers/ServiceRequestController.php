@@ -17,7 +17,10 @@ class ServiceRequestController extends Controller
             ],200);
         }
 
-        $findService = ServiceRequest::where('service_id',$request->service_id)->where('user_id',Auth::user()->id)->where('status',"!=","Completado")->get();
+        $findService = ServiceRequest::where('service_id',$request->service_id)->where('user_id',Auth::user()->id)->where(function ($query){
+            $query->where('status', '!=', 'Completado')
+            ->orWhere('status', '!=', 'Rechazado');
+        })->get();
 
         if($findService->count() > 0){
             return response([
@@ -41,6 +44,43 @@ class ServiceRequestController extends Controller
             "success"=>true,
             "message" => "Se ha guardado correctamente la solicitud del servicio.",
             "serviceRequest" => $serviceRequest
+        ],200);
+    }
+
+    public function myRequests(){
+        $user = auth()->user();
+
+        $myRequests = ServiceRequest::where('user_id',$user->id)->with("service")->get();
+
+        foreach ($myRequests as $value) {
+            $value->serviceName = $value->service->name; 
+        }
+
+        return response([
+            "success"=>true,
+            "data" => $myRequests
+        ],200);
+    }
+
+    public function requestByResponse(){
+        $user = auth()->user();
+
+        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service")->get();
+        
+        foreach ($requestsByResponse as $value) {
+            $value->serviceName = $value->service->name;
+            if($value->quantity > 10 && $user->role_id == 1){
+                $value->actions = true;
+            }elseif($value->quantity <= 10 && $user->role_id == 2){
+                $value->actions = true;
+            }else{
+                $value->actions = false;
+            }
+        }
+
+        return response([
+            "success"=>true,
+            "data" => $requestsByResponse
         ],200);
     }
 }
