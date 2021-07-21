@@ -65,10 +65,12 @@ class ServiceRequestController extends Controller
     public function requestByResponse(){
         $user = auth()->user();
 
-        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service")->get();
+        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","user")->get();
         
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;
+            $value->userName = $value->user->name;
+            
             if($value->quantity > 10 && $user->role_id == 1){
                 $value->actions = true;
             }elseif($value->quantity <= 10 && $user->role_id == 2){
@@ -82,5 +84,44 @@ class ServiceRequestController extends Controller
             "success"=>true,
             "data" => $requestsByResponse
         ],200);
+    }
+
+
+    public function saveResponse($action,$id){
+        try {
+            $user = auth()->user();
+
+            $requestById = ServiceRequest::find($id);
+
+            if($requestById->count() == 0){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró la solicitud.",
+                    "data" => []
+                ],404);
+            }
+
+            if($action == "aprobar"){
+                $status = "Aprobado";
+            }else{
+                $status = "Rechazado";
+            }
+
+            $requestById->status = $status;
+            $requestById->responsed_at = new \DateTime();
+            $requestById->save();
+    
+            return response([
+                "success"=>true,
+                "message"=>"Se ha cambiado el estado de la solicitud correctamente.",
+                "data" => $requestById,
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error al intentar cambiar el estado de la solicitud.",
+                "data" => $e,
+            ],500);
+        }
     }
 }

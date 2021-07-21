@@ -31,5 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //-----------------------SOLICITUD DE SERVICIOS------------------
     Route::post('/service-request','ServiceRequestController@store');
     Route::get('/requests/me','ServiceRequestController@myRequests');
-    Route::get('/requests/pending','ServiceRequestController@requestByResponse');
+
+    Route::get('/requests/pending','ServiceRequestController@requestByResponse')->middleware('isAdminOrDirector');
+    Route::get('/requests/save/{action}/{id}','ServiceRequestController@saveResponse')->middleware('isAdminOrDirector');
 });
