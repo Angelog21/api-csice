@@ -16,7 +16,11 @@ class ServiceRequest extends Model
         "iva",
         "total",
         "quantity",
-        "status"
+        "status",
+        "responsed_at",
+        "completed_at",
+        "start_date",
+        "end_date"
     ];
 
     public function service() {

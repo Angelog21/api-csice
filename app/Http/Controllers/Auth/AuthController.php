@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
@@ -88,7 +88,7 @@ class AuthController extends Controller
         $user->confirmation_code = null;
         $user->save();
 
-        return $this->success(["success"=>true],"Verificado Correctamente");
+        return Redirect::to(env('FRONT_URL').'/');
     }
 
     public function logout(){

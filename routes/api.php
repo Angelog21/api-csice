@@ -22,6 +22,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::get('/users','UserController@getUsers')->middleware('isNotClient');
+    Route::get('/users/{status}/{id}','UserController@setStatusUser')->middleware('isNotClient');
+
     //-----------------SERVICIOS--------------------
     Route::get('/services','ServiceController@index');
     Route::post('/services','ServiceController@store');

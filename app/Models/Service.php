@@ -12,6 +12,7 @@ class Service extends Model
     protected $fillable = [
         "code",
         "name",
+        "unit",
         "petro_quantity"
     ];
 
