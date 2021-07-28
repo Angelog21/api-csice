@@ -86,6 +86,30 @@ class ServiceRequestController extends Controller
         ],200);
     }
 
+    public function manageRequest(){
+        $user = auth()->user();
+
+        $requestsByResponse = ServiceRequest::where('status','Aprobado')->with("service","user")->get();
+        
+        foreach ($requestsByResponse as $value) {
+            $value->serviceName = $value->service->name;
+            $value->userName = $value->user->name;
+            
+            if($value->quantity > 10 && $user->role_id == 1){
+                $value->actions = true;
+            }elseif($value->quantity <= 10 && $user->role_id == 2){
+                $value->actions = true;
+            }else{
+                $value->actions = false;
+            }
+        }
+
+        return response([
+            "success"=>true,
+            "data" => $requestsByResponse
+        ],200);
+    }
+
 
     public function saveResponse($action,$id){
         try {

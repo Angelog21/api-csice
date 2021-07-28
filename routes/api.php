@@ -28,14 +28,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //-----------------SERVICIOS--------------------
     Route::get('/services','ServiceController@index');
-    Route::post('/services','ServiceController@store');
-    Route::post('/services/{id}','ServiceController@update');
-    Route::delete('/services/{id}','ServiceController@destroy');
+    Route::post('/services','ServiceController@store')->middleware('isNotClient');
+    Route::post('/services/{id}','ServiceController@update')->middleware('isNotClient');
+    Route::delete('/services/{id}','ServiceController@destroy')->middleware('isNotClient');
 
     //-----------------------SOLICITUD DE SERVICIOS------------------
     Route::post('/service-request','ServiceRequestController@store');
     Route::get('/requests/me','ServiceRequestController@myRequests');
-
+    Route::get('/requests/manage','ServiceRequestController@manageRequest')->middleware('isNotClient');
     Route::get('/requests/pending','ServiceRequestController@requestByResponse')->middleware('isAdminOrDirector');
     Route::get('/requests/save/{action}/{id}','ServiceRequestController@saveResponse')->middleware('isAdminOrDirector');
 });
