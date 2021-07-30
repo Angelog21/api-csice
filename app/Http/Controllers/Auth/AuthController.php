@@ -64,8 +64,20 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
+        
+        $status = User::where('email',$credentials["email"])->first();
+
+        if($status->count() > 0){
+            if($status->active == 0){
+                return response()->json([
+                    "error"=>true,
+                    "message"=>"El usuario está inactivo"
+                ]);
+            }
+        }
 
         if (Auth::attempt($credentials)) {
+
             $request->session()->regenerate();
             $user = Auth::user();
             return response()->json(["user"=>$user]);
@@ -73,7 +85,7 @@ class AuthController extends Controller
 
         return response()->json([
             "error"=>true,
-            "message"=>"Error, credenciales no válidas"
+            "message"=>"Las credenciales son incorrectas"
         ]);
     }
 
