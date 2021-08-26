@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/user',"Auth\AuthController@register");
+Route::post('/saveFiles',"UserController@saveFiles");
 
 Route::middleware('auth:sanctum')->group(function () {
     
@@ -38,4 +39,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/requests/manage','ServiceRequestController@manageRequest')->middleware('isNotClient');
     Route::get('/requests/pending','ServiceRequestController@requestByResponse')->middleware('isAdminOrDirector');
     Route::get('/requests/save/{action}/{id}','ServiceRequestController@saveResponse')->middleware('isAdminOrDirector');
+
+    Route::get('/get-files/{id?}',"UserController@getFiles");
+    Route::post('/download-file',"UserController@downloadFile");
+
+    Route::get('/send-reminder/{id}',"ServiceRequestController@sendReminder");
 });

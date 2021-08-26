@@ -19,6 +19,7 @@ class ServiceRequest extends Model
         "status",
         "responsed_at",
         "completed_at",
+        "expiration_date",
         "start_date",
         "end_date"
     ];

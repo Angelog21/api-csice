@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserLogsTable extends Migration
+class CreateUserFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateUserLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_logs', function (Blueprint $table) {
+        Schema::create('user_files', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('type');
-            $table->text('data');
+            $table->string('name');
+            $table->text('url');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateUserLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_logs');
+        Schema::dropIfExists('user_files');
     }
 }

@@ -24,6 +24,7 @@ class CreateServiceRequestsTable extends Migration
             $table->string('status')->default("Creado");
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->timestamp('expiration_date')->nullable();
             $table->timestamp('responsed_at')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
