@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PaymentFile;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserFile;
@@ -115,6 +116,18 @@ class UserController extends Controller
                     'type'=>'rif',
                     'name'=>$nombreRif,
                     'url'=>"public/{$user->id}/{$nombreRif}"
+                ]);
+            }
+
+            if($request->file('paymentFile')){
+                $comprobante = $request->file('paymentFile');
+                $nombreComprobante = $comprobante->getClientOriginalName();
+                Storage::disk('local')->put("public/{$user->id}/comprobante-pagos/{$nombreComprobante}",  File::get($comprobante));
+                PaymentFile::create([
+                    'user_id'=>$user->id,
+                    'service_requests_id'=>$request->get('service_request_id'),
+                    'name'=>$nombreComprobante,
+                    'url'=>"public/{$user->id}/comprobante-pagos/{$nombreComprobante}"
                 ]);
             }
 

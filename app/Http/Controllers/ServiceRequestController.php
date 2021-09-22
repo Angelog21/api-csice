@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ServiceRequest;
 use App\Models\User;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -53,7 +54,7 @@ class ServiceRequestController extends Controller
     public function myRequests(){
         $user = auth()->user();
 
-        $myRequests = ServiceRequest::where('user_id',$user->id)->with("service")->get();
+        $myRequests = ServiceRequest::where('user_id',$user->id)->with("service",'files')->get();
 
         foreach ($myRequests as $value) {
             $value->serviceName = $value->service->name; 
@@ -93,7 +94,7 @@ class ServiceRequestController extends Controller
         $user = auth()->user();
 
         $requestsByResponse = ServiceRequest::where('status','Aprobado')
-        ->with("service","user","user.files")->get();
+        ->with("service","user","user.files","files")->get();
         
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;
@@ -163,6 +164,37 @@ class ServiceRequestController extends Controller
             return response([
                 "success"=>false,
                 "message"=>"Ha ocurrido un error al intentar cambiar el estado de la solicitud.",
+                "data" => $e,
+            ],500);
+        }
+    }
+
+    public function saveDates($id,Request $request){
+        try {
+            $requestById = ServiceRequest::where('id',$id)->with('user','service')->first();
+
+
+            if(!$requestById){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró la solicitud.",
+                    "data" => []
+                ],404);
+            }
+
+            $requestById->start_date = new DateTime($request->start_date);
+            $requestById->end_date = new DateTime($request->end_date);
+            $requestById->save();
+    
+            return response([
+                "success"=>true,
+                "message"=>"Se ha actualizado las fechas de gestión de la solicitud correctamente.",
+                "data" => $requestById,
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error al intentar cambiar las fechas de la solicitud.",
                 "data" => $e,
             ],500);
         }
