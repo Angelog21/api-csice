@@ -14,7 +14,13 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        return Service::all()->toJson();
+        $services = Service::all();
+
+        foreach($services as $service){
+            $service->iva_value = $service->iva_value*100;
+        }
+
+        return $services->toJson();
     }
 
     /**
@@ -45,7 +51,8 @@ class ServiceController extends Controller
             'name'=>$request->name,
             'unit'=>$request->unit,
             'code'=>$request->code,
-            'petro_quantity'=>$request->petro_quantity
+            'petro_quantity'=>$request->petro_quantity,
+            'iva_value'=>$request->iva_value
         ]);
 
         return response([
@@ -85,7 +92,8 @@ class ServiceController extends Controller
         $service->update([
             'name'=>$request->name,
             'code'=>$request->code,
-            'petro_quantity'=>$request->petro_quantity
+            'petro_quantity'=>$request->petro_quantity,
+            'petro_quantity'=>$request->iva_value/100
         ]);
 
         $service->save();

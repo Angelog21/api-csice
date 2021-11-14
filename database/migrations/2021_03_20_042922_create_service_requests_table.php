@@ -22,6 +22,7 @@ class CreateServiceRequestsTable extends Migration
             $table->double('total',20,2);
             $table->integer('quantity');
             $table->string('status')->default("Creado");
+            $table->text('observation')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamp('expiration_date')->nullable();

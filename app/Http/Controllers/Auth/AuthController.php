@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Mail;
@@ -42,12 +43,15 @@ class AuthController extends Controller
                 'password' => bcrypt($attr['password']),
                 'email' => $attr['email'],
                 'role_id' => $attr["role"],
-                'confirmation_code'=>$attr["confirmation_code"]
+                'confirmation_code'=>$attr["confirmation_code"],
+                'email_verified_at' => $attr['role'] != 4 ? new DateTime() : null
             ]);
-
-            Mail::send('emails.confirmation_code', $attr, function($message) use ($attr) {
-                $message->to($attr['email'], $attr['name'])->subject('Por favor confirma tu correo');
-            });
+            //si el rol no es el de cliente, no hace falta la verificación
+            if($attr['role'] != 4){
+                Mail::send('emails.confirmation_code', $attr, function($message) use ($attr) {
+                    $message->to($attr['email'], $attr['name'])->subject('Por favor confirma tu correo');
+                });
+            }
     
             return $this->success(["user"=>$user],"Usuario registrado correctamente debe verificar.");
         } catch (\Exception $e) {
@@ -67,13 +71,18 @@ class AuthController extends Controller
         
         $status = User::where('email',$credentials["email"])->first();
 
-        if($status->count() > 0){
+        if($status){
             if($status->active == 0){
                 return response()->json([
                     "error"=>true,
-                    "message"=>"El usuario está inactivo"
+                    "message"=>"El usuario está inactivo."
                 ]);
             }
+        }else{
+            return response()->json([
+                "error"=>true,
+                "message"=>"No se ha encontrado el usuario con el correo indicado."
+            ]);
         }
 
         if (Auth::attempt($credentials)) {

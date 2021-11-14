@@ -13,7 +13,8 @@ class Service extends Model
         "code",
         "name",
         "unit",
-        "petro_quantity"
+        "petro_quantity",
+        "iva_value"
     ];
 
     public function serviceRequests() {

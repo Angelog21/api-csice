@@ -264,4 +264,45 @@ class ServiceRequestController extends Controller
             "data" => [],
         ],200);
     }
+
+    public function requestFinish($id,Request $request){
+        try {
+            $requestById = ServiceRequest::where('id',$id)->with('user','service')->first();
+
+
+            if(!$requestById){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró la solicitud.",
+                    "data" => []
+                ],404);
+            }
+
+            $requestById->status = 'Completado';
+            $requestById->observation = $request->observation;
+            $requestById->completed_at = new \DateTime();
+            $requestById->save();
+
+            $data = [
+                'requestService' => $requestById 
+            ];
+
+            Mail::send('emails.response_request', $data, function($message) use ($data) {
+                $message->to($data['requestService']->user->email, $data['requestService']->user->email);
+                $message->subject('Tu solicitud de servicio se ha completado exitosamente');
+            });
+    
+            return response([
+                "success"=>true,
+                "message"=>"Se ha finalizado el proceso de la solicitud correctamente.",
+                "data" => $requestById,
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error al intentar cambiar el estado de la solicitud.",
+                "data" => $e,
+            ],500);
+        }
+    }
 }

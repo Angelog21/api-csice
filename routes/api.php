@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/requests/me','ServiceRequestController@myRequests');
     Route::get('/requests/manage','ServiceRequestController@manageRequest')->middleware('isNotClient');
     Route::post('/requests/{id}/save-dates','ServiceRequestController@saveDates')->middleware('isNotClient');
+    Route::post('/requests/{id}/finish','ServiceRequestController@requestFinish')->middleware('isNotClient');
     Route::get('/requests/pending','ServiceRequestController@requestByResponse')->middleware('isAdminOrDirector');
     Route::get('/requests/save/{action}/{id}','ServiceRequestController@saveResponse')->middleware('isAdminOrDirector');
 
@@ -45,4 +46,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/download-file',"UserController@downloadFile");
 
     Route::get('/send-reminder/{id}',"ServiceRequestController@sendReminder");
+
+    //---------------------------------ROLES-------------------------
+    Route::get('/roles',"RoleController@index");
+
 });

@@ -21,7 +21,8 @@ class ServiceRequest extends Model
         "completed_at",
         "expiration_date",
         "start_date",
-        "end_date"
+        "end_date",
+        "observation"
     ];
 
     public function service() {
