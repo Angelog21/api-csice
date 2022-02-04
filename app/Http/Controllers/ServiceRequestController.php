@@ -21,11 +21,10 @@ class ServiceRequestController extends Controller
         }
 
         $findService = ServiceRequest::where('service_id',$request->service_id)->where('user_id',Auth::user()->id)->where(function ($query){
-            $query->where('status', '!=', 'Completado')
-            ->orWhere('status', '!=', 'Rechazado');
+            $query->where('status', '!=', 'Completado');
         })->get();
 
-        if($findService->count() > 0){
+        if($findService->where('status','!=','Rechazado')->count() > 0){
             return response([
                 "success"=>false,
                 "message" => "Ya tiene una solicitud con este servicio en proceso."
@@ -287,7 +286,7 @@ class ServiceRequestController extends Controller
                 'requestService' => $requestById 
             ];
 
-            Mail::send('emails.response_request', $data, function($message) use ($data) {
+            Mail::send('emails.request_ending', $data, function($message) use ($data) {
                 $message->to($data['requestService']->user->email, $data['requestService']->user->email);
                 $message->subject('Tu solicitud de servicio se ha completado exitosamente');
             });
