@@ -118,8 +118,8 @@
           <th>CONTACTO</th>
         </tr>
         <tr>
-          <td><b>CLARITZA RIVERA </b></td>
-          <td><b>(0426) 610-62-78</b></td>
+          <td><b>ATENCIÓN FIRMA ELECTRÓNICA </b></td>
+          <td><b>(0212)-5358998</b></td>
         </tr>
       </table>
       <table style="margin-top:-3px" border="1">
@@ -179,7 +179,7 @@
               <th>APROBADO POR</th>
             </tr>
             <tr>
-              <td><b>Edixon Rojas</b></td>
+              <td><b>Oriolla Caballero</b></td>
             </tr>
             <tr>
               <td><b>JEFE DEL CENTRO DE SEGURIDAD INFORMÁTICA Y CERTIFICACIÓN ELECTRÓNICA (CSICE) </b></td>
@@ -192,19 +192,23 @@
       <h3>Condiciones de la oferta</h3>
       <table style="margin-top:10px" border="1">
           <tr>
-            <th>REQUISITOS</th>
+            <th>1.- CONDICIONES GENERALES DE LA OFERTA</th>
+          </tr>
+          <tr>
+            <th>1.1.- ACEPTACIÓN DE LA OFERTA:</th>
           </tr>
           <tr>
             <td>
               <b>
-                En caso de aceptación de la presente oferta, el cliente deberá enviar una copia de ésta firmada y sellada, junto con un documento de compromiso tipo Orden de Compra u Orden de Servicio, al número de fax indicado o en físico en nuestras oficinas.
+                En caso de aceptación de la presente oferta, el cliente deberá enviar una copia de ésta firmada y sellada, junto al comprobante bancario del pago o en caso de no poder realizar el pago por vencimiento de la firma enviar un documento de compromiso tipo Orden de Compra u Orden de Servicio, al mismo correo electrónico (atencion.cliente.psc.fii@gmail.com) donde recibió esta Oferta de Servicio.
+                  <br><br>
+                  <span>DATOS QUE DEBE CONTENER LA ORDEN DE SERVICIO U ORDEN DE COMPRA:</span>
+                  <br><br>
+
                   <ul style="text-align:start">
-                    <li>Nombre de la Empresa</li>
-                    <li>RIF</li>
-                    <li>Dirección Fiscal Completa</li>
-                    <li>Persona Contacto</li>
-                    <li>Teléfono</li>
-                    <li>Fax</li>
+                    <li><b>Datos completos de Facturación:</b> Nombre de la Empresa, RIF, Dirección Fiscal Completa, Persona Contacto, Número de Teléfono.															
+                    </li>
+                    <li><b>Datos del Cliente para el Informe:</b> Nombre de la Empresa, RIF, Dirección Fiscal Completa, Persona Contacto, Número de Teléfono.</li>
                   </ul>
               </b>
             </td>
@@ -212,68 +216,104 @@
       </table>
       <table style="margin-top:-3px" border="1">
         <tr>
-          <th>FORMAS DE PAGO</th>
+          <th>1.2 - FORMAS DE PAGO</th>
         </tr>
         <tr>
           <td style="text-align:start">
             <b>
               Para todo lo relacionado con los pagos y antes de realizar el mismo, se recomienda al cliente comunicarse con la persona contacto de Administración para aclarar cualquier detalle relacionado con la Oferta.
               <br><br>
-              PAGOS EN CHEQUES: Serán realizados a nombre del FUNDACIÓN INSTITUTO DE INGENIERÍA, y deberán ser entregados en la Oficina de Facturación y Cobranza del Instituto de Ingeniería, a la persona contacto de Administración.
+              PAGOS MEDIANTE DEPÓSITOS O TRANSFERENCIAS BANCARIA: Deberán realizarse a la <span style="color:#8f0923">Cuenta Corriente N°  0102-0552-21-0000059831, perteneciente al Banco de Venezuela, a nombre de la FUNDACIÓN INSTITUTO DE INGENIERÍA</span>.
               <br><br>
-              PAGOS MEDIANTE DEPÓSITOS O TRANSFERENCIAS BANCARIA : Deberán realizarse a la Cuenta Corriente N° 0102-0552-21-0000059831, perteneciente al Banco de Venezuela, a nombre de la FUNDACIÓN INSTITUTO DE INGENIERÍA.
-              <br><br>
-              El comprobante del Depósito Bancario deberá hacerse llegar a la Oficina de Facturación y Cobranza de la Fundación Instituto de Ingeniería, a la Persona Contacto de Administración; bien sea personalmente, mensajería o al número de fax indicado.
+              El comprobante de pago Bancario deberá hacerse llegar a la Oficina de Facturación y Cobranza de la Fundación Instituto de Ingeniería, a la Persona Contacto de Administración; bien sea personalmente o por correo electronico.
             </b>
           </td>
         </tr>
       </table>
       <table style="margin-top:-3px" border="1">
         <tr>
-          <th>CONDICIONES PARA EL PRÉSTAMO DEL SERVICIO</th>
+          <th>1.3 - IVA e ISLR</th>
         </tr>
         <tr>
           <td style="text-align:start">
             <b>
-              El plazo mínimo para la emisión de Certificados Electrónicos será de cuarenta y ocho (48) horas posteriores a la recepción de la Orden de Servicio o de Compra, y a su vez que se hayan cumplido con los requisitos para la solicitud. En el caso de que el cliente solicite la ejecución de jornadas para validar a los signatarios debe ver la siguiente sección.
-              <br><br>
-              Para realizar el retiro de los Certificados Electrónicos en las instalaciones de la Fundación Instituto de Ingeniería, deberá  efectuarse mediante previa notificación por parte del Cliente en horario de oficina 8:30 am-12:00 pm y de 1:00 pm-4:30 pm.
-              <br><br>
-              El plazo para retirar los Certificados Electrónicos es diez (10) días hábiles a partir de la fecha en que se notifique al cliente de la culminación del servicio, después de los cuales el Instituto de Ingeniería no se hará responsable de los mismos.
+              Esta oferta contempla el Impuesto al Valor Agregado (IVA). El mismo esta expresado en el monto total del servicio.
+              <br>
             </b>
           </td>
         </tr>
       </table>
       <table style="margin-top:-3px" border="1">
         <tr>
-          <th>ENTREGA DE CERTIFICADOS ELECTRÓNICOS</th>
+          <th>2 - CONDICIONES PARA EL PRÉSTAMO DEL SERVICIO</th>
         </tr>
         <tr>
           <td style="text-align:start">
             <b>
-              El plazo mínimo para la emisión de Certificados Electrónicos será de cuarenta y ocho (48) horas posteriores a la recepción de la Orden de Servicio o de Compra, y a su vez que se hayan cumplido con los requisitos para la solicitud. En el caso de que el cliente solicite la ejecución de jornadas para validar a los signatarios debe ver la siguiente sección.
+              1.- Esta oferta tendrá una vigencia de quince (15) días para su ejecución a partir de la aceptación de la misma, si no es ejecutada en el tiempo indicado el cliente deberá cancelar la diferencia de su costo inicial, en caso de que exista una variación de precios decretada por las autoridades del Instituto de Ingeniería al momento de su ejecución.
               <br><br>
-              Para realizar el retiro de los Certificados Electrónicos en las instalaciones de la Fundación Instituto de Ingeniería, deberá  efectuarse mediante previa notificación por parte del Cliente en horario de oficina 8:30 am-12:00 pm y de 1:00 pm-4:30 pm.
+              2.- Las condiciones y políticas del ciclo de vida del certificado electrónico, emitido por el Proveedor de Servicios de Certificación Electrónica de la Fundación Instituto de Ingeniería para la Investigación y Desarrollo Tecnológico, esta disponible en el sitio web: https://publicador-psc.fii.gob.ve/dpc
               <br><br>
-              El plazo para retirar los Certificados Electrónicos es diez (10) días hábiles a partir de la fecha en que se notifique al cliente de la culminación del servicio, después de los cuales el Instituto de Ingeniería no se hará responsable de los mismos.
             </b>
           </td>
         </tr>
       </table>
       <table style="margin-top:-3px" border="1">
         <tr>
-          <th>POLÍTICAS PARA EJECUCIÓN DE JORNADAS</th>
+          <th>2.1.- CONDICIONES DE PAGO:</th>
         </tr>
         <tr>
           <td style="text-align:start">
             <b>
-              Jornada de Validación: realizada para un máximo de 15 signatarios, donde el número de jornadas corresponden a la cantidad de certificados solicitados por el cliente.
+              Cancelar al recibir la Oferta de Servicio en el plazo de la vigencia de la misma. De no cancelar durante ese lapso volver a solicitar una Oferta de Servicio.
+            </b>
+          </td>
+        </tr>
+      </table>
+      <table style="margin-top:-3px" border="1">
+        <tr>
+          <th>2.2.- CONDICIONES DE GARANTÍA:</th>
+        </tr>
+        <tr>
+          <td style="text-align:start">
+            <b>
+              El cliente podrá solicitar a la Fundación Instituto de Ingeniería la sustitución de la tarjeta criptográfica en caso de desperfecto, siempre y cuando la falla no se deba a un mal uso por parte del cliente, para ello se debe dirigir a las Oficinas de Certificación Electronica para realizar la verificación de la misma.
+            </b>
+          </td>
+        </tr>
+      </table>
+      <table style="margin-top:-3px" border="1">
+        <tr>
+          <th>2.3.- ENTREGA DE CERTIFICADOS ELECTRÓNICOS:</th>
+        </tr>
+        <tr>
+          <td style="text-align:start">
+            <b>
+              El plazo mínimo para la emisión de Certificados Electrónicos será de cuarenta y ocho (48) horas posteriores a la recepción de la Orden de Servicio o de Compra, y a su vez que se hayan cumplido con los requisitos para la solicitud. En el caso de que el cliente solicite la ejecución de jornadas para validar a los signatarios debe ver la sección 2.4. Políticas para Ejecución de Jornadas.
               <br><br>
-              Jornada de Sensibilización sobre el uso de la Certificación Electrónica: realizada para un máximo de 30 participantes, con una duración aproximada de dos (2) horas. La cantidad de jornadas para los casos de emisión de certificados por primera vez se recomienda que tenga relación con la cantidad de signatarios a ser validados. Para aquellos casos en los que se desea conocer sobre el tema de la Certificación Electrónica el cliente debe indicar la cantidad de jornadas que necesita.
+              Para realizar la emisión de los Certificados Electrónicos en las instalaciones de la Fundación Instituto de Ingeniería, deberá  efectuarse mediante previa notificación por parte del Cliente, es decir, deben comunicarse a través del número de atención (0212)-5358998 en horario de oficina de 9:00 AM-12:00 PM y de 1:00 PM-4:00 PM, e indicar el día y la hora en que asistiran para la emisión del certificado electrónico, ya que estamos trabajando por citas.
+            </b>
+          </td>
+        </tr>
+      </table>
+      <table style="margin-top:-3px" border="1">
+        <tr>
+          <th>2.4.- POLÍTICAS PARA EJECUCIÓN DE JORNADAS:</th>
+        </tr>
+        <tr>
+          <td style="text-align:start">
+            <b>
+              Para realizar la ejecución de las Jornadas que ofrece el Centro de Seguridad Informática y Certificación Electrónica (CSICE), se cumple con las siguientes especificaciones:
               <br><br>
-              Jornada de Aspectos Técnicos de la Certificación Electrónica: realizada para un máximo de 15 participantes, con una duración aproximada de dos (2) horas. Este tipo de jornada esta enfocada para el departamento, gerencia o área de tecnología de la institución solicitante, con la finalidad de formar al personal técnico en el uso, administración y soporte de los certificados electrónico.
+              2.4.1.- Jornada de Validación: realizada para un máximo de 15 signatarios, donde el número de jornadas corresponden a la cantidad de certificados solicitados por el cliente.
               <br><br>
-              Jornada sobre Marco Jurídico de la Certificación Electrónica: realizada para un máximo de 15 participantes, con una duración aproximada de tres (3) horas. Este tipo de jornada esta enfocada tanto para el departamento legal, auditoria interna, como para aquellas personas que el cliente considere que deben manejar las leyes, estándares y normas establecidas para dar soporte jurídico a la firma electrónica y demás servicios de la certificación electrónica.
+              2.4.2.- Jornada de Sensibilización sobre el uso de la Certificación Electrónica: realizada para un máximo de 30 participantes, con una duración aproximada de dos (2) horas. La cantidad de jornadas para los casos de emisión de certificados por primera vez se recomienda que tenga relación con la cantidad de signatarios a ser validados. Para aquellos casos en los que se desea conocer sobre el tema de la Certificación Electrónica el cliente debe indicar la cantidad de jornadas que necesita.
+              <br><br>
+              2.4.3.- Jornada de Aspectos Técnicos de la Certificación Electrónica: realizada para un máximo de 15 participantes, con una duración aproximada de dos (2) horas. Este tipo de jornada esta enfocada para el departamento, gerencia o área de tecnología de la institución solicitante, con la finalidad de formar al personal técnico en el uso, administración y soporte de los certificados electrónico.
+              <br><br>
+              2.4.4.- Jornada sobre Marco Jurídico de la Certificación Electrónica: realizada para un máximo de 15 participantes, con una duración aproximada de tres (3) horas. Este tipo de jornada esta enfocada tanto para el departamento legal, auditoria interna, como para aquellas personas que el cliente considere que deben manejar las leyes, estándares y normas establecidas para dar soporte jurídico a la firma electrónica y demás servicios de la certificación electrónica.
+              <br><br>
+              En los casos en que el cliente no disponga del espacio para realizar las Jornadas de Sensibilización, Técnica y Marco Jurídico, la Fundación Instituto de Ingeniería puede gestionar el espacio dentro de sus instalaciones, sin embargo será cargado al precio de la jornada los costos relacionados a refrigerios y organización.
             </b>
           </td>
         </tr>
