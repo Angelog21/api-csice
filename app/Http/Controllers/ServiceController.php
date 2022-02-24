@@ -93,7 +93,7 @@ class ServiceController extends Controller
             'name'=>$request->name,
             'code'=>$request->code,
             'petro_quantity'=>$request->petro_quantity,
-            'petro_quantity'=>$request->iva_value/100
+            'iva_value'=>$request->iva_value/100
         ]);
 
         $service->save();
