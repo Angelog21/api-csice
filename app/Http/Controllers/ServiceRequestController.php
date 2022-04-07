@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ServiceRequest;
 use App\Models\User;
+use App\Traits\CustomEncript;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -12,42 +13,73 @@ use Illuminate\Support\Facades\Mail;
 
 class ServiceRequestController extends Controller
 {
+
+    use CustomEncript;
+
     public function store(Request $request){
-        if(!isset($request->service_id) || !isset($request->quantity) || !isset($request->price)){
+        try {
+            if(!isset($request->service_id) || !isset($request->quantity) || !isset($request->price)){
+                return response([
+                    "success"=>false,
+                    "message" => "Faltan datos para insertar."
+                ],200);
+            }
+    
+            $findService = ServiceRequest::where('service_id',$request->service_id)->where('user_id',Auth::user()->id)->where(function ($query){
+                $query->where('status', '!=', 'Completado');
+            })->get();
+    
+            if($findService->where('status','!=','Rechazado')->count() > 0){
+                return response([
+                    "success"=>false,
+                    "message" => "Ya tiene una solicitud con este servicio en proceso."
+                ],200);
+            }
+    
+            $serviceRequest = ServiceRequest::create([
+                'user_id'=>Auth::user()->id,
+                'service_id'=>$request->service_id,
+                'quantity'=>$request->quantity,
+                'price'=>$request->price,
+                'iva'=>$request->iva,
+                'total'=>$request->total,
+                'expiration_date'=>$request->expirationDate,
+                'status'=>"Creado",
+                'emailList'=>json_encode($request->emails),
+                'created_at'=>Carbon::now()
+            ]);
+    
+            if(!empty($request->emails)){
+                //encriptar el id del servicio para la url
+                $serviceRequest["encript_id"] = $this->encrypt($serviceRequest["id"],"serviceRequestId");
+                try {
+                    //recorre cada email que se agrega desde el front
+                    foreach($request->emails as $email){
+                        //enviara el correo con el enlace al formulario
+                        Mail::send('emails.service_register', ["serviceRequest"=>$serviceRequest], function($message) use ($email) {
+                            $message->to($email, $email);
+                            $message->subject('Registro de datos del signatario');
+                        });
+                    }
+                } catch (\Exception $e) {
+                    return response([
+                        "success"=>false,
+                        "message" => "Ha ocurrido un error en el servidor al enviar correo.",
+                    ],500);
+                }
+            }
+    
+            return response([
+                "success"=>true,
+                "message" => "Se ha guardado correctamente la solicitud del servicio.",
+                "serviceRequest" => $serviceRequest
+            ],200);
+        } catch (\Exception $e) {
             return response([
                 "success"=>false,
-                "message" => "Faltan datos para insertar."
-            ],200);
+                "message" => "Ha ocurrido un error en el servidor.",
+            ],500);
         }
-
-        $findService = ServiceRequest::where('service_id',$request->service_id)->where('user_id',Auth::user()->id)->where(function ($query){
-            $query->where('status', '!=', 'Completado');
-        })->get();
-
-        if($findService->where('status','!=','Rechazado')->count() > 0){
-            return response([
-                "success"=>false,
-                "message" => "Ya tiene una solicitud con este servicio en proceso."
-            ],200);
-        }
-
-        $serviceRequest = ServiceRequest::create([
-            'user_id'=>Auth::user()->id,
-            'service_id'=>$request->service_id,
-            'quantity'=>$request->quantity,
-            'price'=>$request->price,
-            'iva'=>$request->iva,
-            'total'=>$request->total,
-            'expiration_date'=>$request->expirationDate,
-            'status'=>"Creado",
-            'created_at'=>Carbon::now()
-        ]);
-
-        return response([
-            "success"=>true,
-            "message" => "Se ha guardado correctamente la solicitud del servicio.",
-            "serviceRequest" => $serviceRequest
-        ],200);
     }
 
     public function myRequests(){

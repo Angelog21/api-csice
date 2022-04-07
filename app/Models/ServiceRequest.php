@@ -22,7 +22,8 @@ class ServiceRequest extends Model
         "expiration_date",
         "start_date",
         "end_date",
-        "observation"
+        "observation",
+        "emailList",
     ];
 
     public function service() {
