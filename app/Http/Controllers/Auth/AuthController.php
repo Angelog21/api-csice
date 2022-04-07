@@ -68,6 +68,15 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
+
+        if(!isset($credentials["email"])){
+            return response()->json([
+                "error"=>true,
+                "message"=>"Debe ingresar un correo"
+            ]);
+        }
+
+        $credentials["email"] = strtolower($credentials["email"]);
         
         $status = User::where('email',$credentials["email"])->first();
 
