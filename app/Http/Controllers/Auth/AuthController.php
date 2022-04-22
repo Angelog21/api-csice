@@ -12,6 +12,10 @@ use DateTime;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Mail;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -94,17 +98,19 @@ class AuthController extends Controller
             ]);
         }
 
-        if (Auth::attempt($credentials)) {
-
-            $request->session()->regenerate();
-            $user = Auth::user();
-            return response()->json(["user"=>$user]);
+        try {
+            //si no se crea el token
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(["error"=>true,
+                                        "message"=>"Las credenciales son incorrectas"]);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Ha ocurrido un error en el servidor'], 500);
         }
 
-        return response()->json([
-            "error"=>true,
-            "message"=>"Las credenciales son incorrectas"
-        ]);
+        $user = Auth::user();
+        return response()->json(["user"=>$user,"token"=>$token]);
+
     }
 
     public function verify($code)
@@ -120,9 +126,31 @@ class AuthController extends Controller
 
         return Redirect::to(env('FRONT_URL').'/');
     }
-
-    public function logout(){
+    
+    public function logout( Request $request ) {
         Auth::logout();
-        return $this->success([],'Se ha cerrado la sesión correctamente');
+        $token = $request->header('Authorization');
+    
+        try {
+            JWTAuth::parseToken()->invalidate( $token );
+            return $this->success([],'Se ha cerrado la sesión correctamente');
+        } catch ( TokenExpiredException $exception ) {
+            return response()->json( [
+                'error'   => true,
+                'message' => trans( 'Token expirado' )
+
+            ], 401 );
+        } catch ( TokenInvalidException $exception ) {
+            return response()->json( [
+                'error'   => true,
+                'message' => 'Token inválido'
+            ], 401 );
+
+        } catch ( JWTException $exception ) {
+            return response()->json( [
+                'error'   => true,
+                'message' => trans( 'Falta el token' )
+            ], 500 );
+        }
     }
 }
