@@ -20,7 +20,7 @@ class CreateClientsTable extends Migration
             $table->string('identification_card')->unique();
             $table->string('email');
             $table->string('names');
-            $table->string('surames');
+            $table->string('surnames');
             $table->string('direction');
             $table->string('state');
             $table->string('municipality');

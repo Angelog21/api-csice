@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/user',"Auth\AuthController@register");
 Route::post('/saveFiles',"UserController@saveFiles");
+Route::post('/save-client',"ClientController@store");
 
 Route::middleware('auth')->group(function () {
 
@@ -44,7 +45,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/get-files/{id?}',"UserController@getFiles");
     Route::post('/download-file',"UserController@downloadFile");
-    Route::post('/save-client',"ClientController@store");
 
     Route::get('/send-reminder/{id}',"ServiceRequestController@sendReminder");
 

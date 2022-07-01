@@ -13,11 +13,12 @@ class Client extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        "service_request_id",
         "document_type",
         "identification_card",
         "email",
         "names",
-        "surames",
+        "surnames",
         "state",
         "municipality",
         "direction",

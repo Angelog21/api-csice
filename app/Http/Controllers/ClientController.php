@@ -38,9 +38,9 @@ class ClientController extends Controller
                     "identification_card" => $request->identificationCard,
                     "email" => $request->email,
                     "names" => $request->names,
-                    "surames" => $request->surames,
-                    "state" => $request->state,
-                    "municipality" => $request->municipality,
+                    "surnames" => $request->surnames,
+                    "state" => $request->state || "hola",
+                    "municipality" => $request->municipality || "Hola",
                     "direction" => $request->direction,
                     "institution_name" => $request->institutionName,
                     "organizational_unit" => $request->organizationalUnit,
@@ -58,10 +58,11 @@ class ClientController extends Controller
                     "message" => "Falta el id de la solicitud.",
                 ],400);
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             return response([
                 "success"=>false,
                 "message" => "Ha ocurrido un error en el servidor.",
+                "data" => $e
             ],500);
         }
     }
