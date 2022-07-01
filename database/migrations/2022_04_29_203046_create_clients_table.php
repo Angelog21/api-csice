@@ -24,7 +24,6 @@ class CreateClientsTable extends Migration
             $table->string('direction');
             $table->string('state');
             $table->string('municipality');
-            $table->string('direction');
             $table->string('institution_name');
             $table->string('organizational_unit');
             $table->string('phone');
