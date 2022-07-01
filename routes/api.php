@@ -19,7 +19,7 @@ Route::post('/user',"Auth\AuthController@register");
 Route::post('/saveFiles',"UserController@saveFiles");
 
 Route::middleware('auth')->group(function () {
-    
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/get-files/{id?}',"UserController@getFiles");
     Route::post('/download-file',"UserController@downloadFile");
+    Route::post('/save-client',"ClientController@store");
 
     Route::get('/send-reminder/{id}',"ServiceRequestController@sendReminder");
 
