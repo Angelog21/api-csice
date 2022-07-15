@@ -13,14 +13,18 @@ class Client extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'email',
-        'state',
-        'location',
-        'institution',
-        'organizational_unit',
-        'position_designation',
-        'address',
-        'id_type', //enum
-        'dni',
+        "service_request_id",
+        "document_type",
+        "identification_card",
+        "email",
+        "names",
+        "surnames",
+        "state",
+        "municipality",
+        "direction",
+        "institution_name",
+        "organizational_unit",
+        "phone",
+        "office_phone"
     ];
 }
