@@ -59,7 +59,7 @@ class AuthController extends Controller
     
             return $this->success(["user"=>$user],"Usuario registrado correctamente debe verificar.");
         } catch (\Exception $e) {
-            return $this->error($e->message,500,$e);
+            return $this->error("Ha ocurrido un error en el servidor",500,$e);
         }
     }
 
