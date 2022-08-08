@@ -20,7 +20,3 @@ Route::get('/', function () {
 Route::post('login','Auth\AuthController@login');
 Route::get('logout','Auth\AuthController@logout');
 Route::get('register/verify/{code}', 'Auth\AuthController@verify');
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('serviceRequest/download/{id}', 'ServiceRequestController@downloadRequestService');
-});

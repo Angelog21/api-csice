@@ -30,7 +30,7 @@ class ClientController extends Controller
     {
         try {
             if (isset($request->serviceRequestId)) {
-                $serviceRequestId = $this->decrypt($request->serviceRequestId,"serviceRequestId");
+                $serviceRequestId = $request->serviceRequestId;
 
                 Client::create([
                     "service_request_id"=>$serviceRequestId,
@@ -39,8 +39,8 @@ class ClientController extends Controller
                     "email" => $request->email,
                     "names" => $request->names,
                     "surnames" => $request->surnames,
-                    "state" => $request->state || "hola",
-                    "municipality" => $request->municipality || "Hola",
+                    "state" => $request->state,
+                    "municipality" => $request->municipality,
                     "direction" => $request->direction,
                     "institution_name" => $request->institutionName,
                     "organizational_unit" => $request->organizationalUnit,

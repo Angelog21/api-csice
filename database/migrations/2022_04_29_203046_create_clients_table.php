@@ -15,7 +15,7 @@ class CreateClientsTable extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('service_request_id')->constrained('service_requests');
+            $table->bigInteger('service_request_id');
             $table->string('document_type');
             $table->string('identification_card')->unique();
             $table->string('email');

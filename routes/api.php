@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users','UserController@getUsers')->middleware('isNotClient');
     Route::get('/users/{status}/{id}','UserController@setStatusUser')->middleware('isNotClient');
+    Route::get('serviceRequest/download/{id}', 'ServiceRequestController@downloadRequestService');
 
     //-----------------SERVICIOS--------------------
     Route::get('/services','ServiceController@index');

@@ -15,7 +15,7 @@ class UserController extends Controller
     public function getUsers(){
         try {
             $me = auth()->user();
-            $users = User::where('role_id','!=',1)->where('role_id','!=',2)->get();
+            $users = User::get();
 
             if($users->count() == 0){
                 return response([

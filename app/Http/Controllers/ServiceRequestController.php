@@ -51,7 +51,7 @@ class ServiceRequestController extends Controller
     
             if(!empty($request->emails)){
                 //encriptar el id del servicio para la url
-                $serviceRequest["encript_id"] = $this->encrypt($serviceRequest["id"],"serviceRequestId");
+                $serviceRequest["encript_id"] = $serviceRequest["id"];
                 try {
                     //recorre cada email que se agrega desde el front
                     foreach($request->emails as $email){
@@ -259,8 +259,11 @@ class ServiceRequestController extends Controller
             ];
 
             $pdf = \PDF::loadView('reports.serviceRequest', $data);
-    
-            return $pdf->download("Solicitud-{$requestService->id}.pdf");
+
+            return response([
+                "success"=>true,
+                "data" => 'data:application/pdf;base64,'.base64_encode($pdf->stream())
+            ],200);
 
         } catch (\Exception $e) {
             return response([
