@@ -58,7 +58,7 @@
             <th>FECHA CADUCIDAD</th>
           </tr>
           <tr>
-            <td><b>{{$requestService->id}}</b></td>
+            <td><b>{{$requestService->correlativo}}</b></td>
             <td><b>{{substr($requestService->created_at,0,10)}}</b></td>
             <td><b>15</b></td>
             <td><b>{{$requestService->expiration_date}}</b></td>

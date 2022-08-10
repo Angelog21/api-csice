@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\ServiceRequest;
 use App\Models\User;
 use App\Traits\CustomEncript;
+use App\Traits\GenerateCorrelative;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class ServiceRequestController extends Controller
 {
 
-    use CustomEncript;
+    use CustomEncript,GenerateCorrelative;
 
     public function store(Request $request){
         try {
@@ -35,12 +37,21 @@ class ServiceRequestController extends Controller
                     "message" => "Ya tiene una solicitud con este servicio en proceso."
                 ],200);
             }
+
+            $lastRequest = DB::table('service_requests')->orderBy('created_at', 'desc')->limit(1)->get();
+
+            if ($lastRequest) {
+                $generateCorrelative = $this->generate($lastRequest[0]->correlativo);
+            }else{
+                $generateCorrelative = $this->generate(null);
+            }
     
             $serviceRequest = ServiceRequest::create([
                 'user_id'=>Auth::user()->id,
                 'service_id'=>$request->service_id,
                 'quantity'=>$request->quantity,
                 'price'=>$request->price,
+                'correlativo'=>$generateCorrelative,
                 'iva'=>$request->iva,
                 'total'=>$request->total,
                 'expiration_date'=>$request->expirationDate,
@@ -338,5 +349,8 @@ class ServiceRequestController extends Controller
                 "data" => $e,
             ],500);
         }
+
     }
+
+    
 }

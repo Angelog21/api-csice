@@ -21,6 +21,7 @@ class ServiceRequest extends Model
         "completed_at",
         "expiration_date",
         "start_date",
+        "correlativo",
         "end_date",
         "observation",
         "emailList",

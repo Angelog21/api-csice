@@ -21,6 +21,7 @@ class CreateServiceRequestsTable extends Migration
             $table->double('iva',20,2);
             $table->double('total',20,2);
             $table->integer('quantity');
+            $table->string('correlativo')->nullable();
             $table->string('status')->default("Creado");
             $table->text('observation')->nullable();
             $table->text('emailList')->nullable();
