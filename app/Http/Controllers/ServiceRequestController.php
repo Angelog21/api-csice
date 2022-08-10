@@ -40,7 +40,7 @@ class ServiceRequestController extends Controller
 
             $lastRequest = DB::table('service_requests')->orderBy('created_at', 'desc')->limit(1)->get();
 
-            if ($lastRequest) {
+            if (count($lastRequest) > 0) {
                 $generateCorrelative = $this->generate($lastRequest[0]->correlativo);
             }else{
                 $generateCorrelative = $this->generate(null);
@@ -89,7 +89,7 @@ class ServiceRequestController extends Controller
             return response([
                 "success"=>false,
                 "message" => "Ha ocurrido un error en el servidor.",
-                "error" => $e->message
+                "error" => $e
             ],500);
         }
     }
