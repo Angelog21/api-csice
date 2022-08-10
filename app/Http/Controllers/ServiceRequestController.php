@@ -89,6 +89,7 @@ class ServiceRequestController extends Controller
             return response([
                 "success"=>false,
                 "message" => "Ha ocurrido un error en el servidor.",
+                "error" => $e
             ],500);
         }
     }
