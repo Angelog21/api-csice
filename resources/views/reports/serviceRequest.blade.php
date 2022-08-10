@@ -26,7 +26,7 @@
     </style>
 </head>
 <body>
-    <img src="{{public_path().'/img/headerPDF.png'}}" alt="">
+    <img src="{{public_path().'/img/HeaderPDF.png'}}" alt="">
     <div style="margin-top:20px;width:703px">
       <table style="margin-top:10px" border="1">
           <tr>
