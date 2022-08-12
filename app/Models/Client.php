@@ -27,4 +27,9 @@ class Client extends Model
         "phone",
         "office_phone"
     ];
+
+    protected $casts = [
+        'created_at' => 'datetime:d-m-Y',
+        'updated_at' => 'datetime:d-m-Y'
+    ];
 }

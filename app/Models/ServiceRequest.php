@@ -27,6 +27,11 @@ class ServiceRequest extends Model
         "emailList",
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:d-m-Y',
+        'updated_at' => 'datetime:d-m-Y'
+    ];
+
     public function service() {
         return $this->belongsTo(Service::class,'service_id');
     }

@@ -17,6 +17,11 @@ class Service extends Model
         "iva_value"
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:d-m-Y',
+        'updated_at' => 'datetime:d-m-Y'
+    ];
+
     public function serviceRequests() {
         return $this->hasMany(ServiceRequest::class);
     }
