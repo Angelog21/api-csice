@@ -83,6 +83,44 @@ class UserController extends Controller
         }
     }
 
+    public function setRoleUser(Request $request){
+        try {
+            if (!isset($request->id)) {
+                return response([
+                    "success"=>false,
+                    "message"=>"Debe enviar el id del usuario.",
+                    "data" => []
+                ],200);
+            }
+
+            $user = User::find($request->id);
+
+            if(empty($user)){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró el usuario.",
+                    "data" => []
+                ],200);
+            }
+
+            $user->role_id = $request->role_id;
+            $user->save();
+
+            return response([
+                "success"=>true,
+                "message"=>"Usuario actualizado correctamente.",
+                "data" => $user
+            ],200);
+
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ocurrió un error en el servidor.",
+                "data" => $e
+            ],500);
+        }
+    }
+
     public function saveFiles(Request $request){
         try {
             $user = User::find($request->get('user_id'));
@@ -154,9 +192,9 @@ class UserController extends Controller
             if(isset($id) && $user->role_id != 4){
                 $user = User::find($id);
             }
-    
+
             $files = UserFile::where('user_id',$user->id)->get();
-    
+
             if($files->where('type','cedula')->count() > 0 && $files->where('type','rif')->count() > 0){
                 return response([
                     "success"=>true,
@@ -164,7 +202,7 @@ class UserController extends Controller
                     "data" => $files
                 ],200);
             }
-    
+
             return response([
                 "success"=>true,
                 "message"=>"Negativo",
@@ -191,7 +229,7 @@ class UserController extends Controller
             $mime_type = finfo_buffer($f, $imgdata, FILEINFO_MIME_TYPE);
 
             $file = "data:{$mime_type};base64,".$file;
-            
+
             return response([
                 "success"=>true,
                 "message"=>"Positivo",

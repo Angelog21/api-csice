@@ -10,7 +10,6 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 
@@ -27,11 +26,11 @@ class ServiceRequestController extends Controller
                     "message" => "Faltan datos para insertar."
                 ],200);
             }
-    
+
             $findService = ServiceRequest::where('service_id',$request->service_id)->where('user_id',Auth::user()->id)->where(function ($query){
                 $query->where('status', '!=', 'Completado');
             })->get();
-    
+
             if($findService->where('status','!=','Rechazado')->count() > 0){
                 return response([
                     "success"=>false,
@@ -46,7 +45,7 @@ class ServiceRequestController extends Controller
             }else{
                 $generateCorrelative = $this->generate(null);
             }
-    
+
             $serviceRequest = ServiceRequest::create([
                 'user_id'=>Auth::user()->id,
                 'service_id'=>$request->service_id,
@@ -60,7 +59,7 @@ class ServiceRequestController extends Controller
                 'emailList'=>json_encode($request->emails),
                 'created_at'=>Carbon::now()
             ]);
-    
+
             if(!empty($request->emails)){
                 //encriptar el id del servicio para la url
                 $serviceRequest["encript_id"] = $serviceRequest["id"];
@@ -80,7 +79,7 @@ class ServiceRequestController extends Controller
                     ],500);
                 }
             }
-    
+
             return response([
                 "success"=>true,
                 "message" => "Se ha guardado correctamente la solicitud del servicio.",
@@ -101,7 +100,7 @@ class ServiceRequestController extends Controller
         $myRequests = ServiceRequest::where('user_id',$user->id)->with("service",'files')->get();
 
         foreach ($myRequests as $value) {
-            $value->serviceName = $value->service->name; 
+            $value->serviceName = $value->service->name;
         }
 
         return response([
@@ -114,11 +113,11 @@ class ServiceRequestController extends Controller
         $user = auth()->user();
 
         $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","user")->get();
-        
+
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;
             $value->userName = $value->user->name;
-            
+
             if($value->quantity > 10 && $user->role_id == 1){
                 $value->actions = true;
             }elseif($value->quantity <= 10 && $user->role_id == 2){
@@ -134,16 +133,26 @@ class ServiceRequestController extends Controller
         ],200);
     }
 
+    public function allRequests(){
+
+        $allRequests = ServiceRequest::with("service","user")->get();
+
+        return response([
+            "success"=>true,
+            "data" => $allRequests
+        ],200);
+    }
+
     public function manageRequest(){
         $user = auth()->user();
 
         $requestsByResponse = ServiceRequest::where('status','Aprobado')
         ->with("service","user","user.files","files")->get();
-        
+
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;
             $value->userName = $value->user->name;
-            
+
             if($value->quantity > 10 && $user->role_id == 1){
                 $value->actions = true;
             }elseif($value->quantity <= 10 && $user->role_id == 2){
@@ -184,21 +193,21 @@ class ServiceRequestController extends Controller
             $requestById->save();
 
             $data = [
-                'requestService' => $requestById 
+                'requestService' => $requestById
             ];
 
             Mail::send('emails.response_request', $data, function($message) use ($data,$status) {
                 $message->to($data['requestService']->user->email, $data['requestService']->user->email);
                 if($status == 'Aprobado'){
                     $message->subject('Tu solicitud ha sido aprobada');
-        
+
                     $pdf = \PDF::loadView('reports.serviceRequest', $data);
                     $message->attachData($pdf->output(), "Solicitud-{$data['requestService']->id}.pdf");
                 }else{
                     $message->subject('Tu solicitud ha sido rechazada');
                 }
             });
-    
+
             return response([
                 "success"=>true,
                 "message"=>"Se ha cambiado el estado de la solicitud correctamente.",
@@ -229,7 +238,7 @@ class ServiceRequestController extends Controller
             $requestById->start_date = new DateTime($request->start_date);
             $requestById->end_date = new DateTime($request->end_date);
             $requestById->save();
-    
+
             return response([
                 "success"=>true,
                 "message"=>"Se ha actualizado las fechas de gestión de la solicitud correctamente.",
@@ -248,7 +257,7 @@ class ServiceRequestController extends Controller
     {
         try {
             $requestService = ServiceRequest::where('id', $id)->with('service','user')->first();
-            
+
             if(!$requestService){
                 return response([
                     "success"=>false,
@@ -268,7 +277,7 @@ class ServiceRequestController extends Controller
             }
 
             $data = [
-                'requestService' => $requestService 
+                'requestService' => $requestService
             ];
 
             $pdf = \PDF::loadView('reports.serviceRequest', $data);
@@ -331,14 +340,14 @@ class ServiceRequestController extends Controller
             $requestById->save();
 
             $data = [
-                'requestService' => $requestById 
+                'requestService' => $requestById
             ];
 
             Mail::send('emails.request_ending', $data, function($message) use ($data) {
                 $message->to($data['requestService']->user->email, $data['requestService']->user->email);
                 $message->subject('Tu solicitud de servicio se ha completado exitosamente');
             });
-    
+
             return response([
                 "success"=>true,
                 "message"=>"Se ha finalizado el proceso de la solicitud correctamente.",
@@ -354,5 +363,5 @@ class ServiceRequestController extends Controller
 
     }
 
-    
+
 }
