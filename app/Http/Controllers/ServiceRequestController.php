@@ -10,6 +10,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 
 class ServiceRequestController extends Controller
 {
@@ -100,7 +101,24 @@ class ServiceRequestController extends Controller
     public function requestByResponse(){
         $user = auth()->user();
 
-        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","user")->get();
+        $requestsByResponse = ServiceRequest::select(
+            'user_id',
+            'service_id',
+            'price',
+            'iva',
+            'total',
+            'quantity',
+            'status',
+            'responsed_at',
+            'completed_at',
+            'expiration_date',
+            'start_date',
+            'end_date',
+            'observation',
+            'emailList',
+            'update_at',
+            DB::raw('DATE(created_at)')
+        )->where('status','Creado')->with("service","user")->get();
         
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;
