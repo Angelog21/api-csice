@@ -51,7 +51,6 @@ class UsersSeeder extends Seeder
             'role_id' => 3
         ]);
 
-
         User::create([
             'name' => 'Cliente',
             'social_reason' => 'Cliente',
