@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\models\User;
+use App\Models\User;
 use DateTime;
 
 class UsersSeeder extends Seeder
