@@ -222,6 +222,35 @@ class ServiceRequestController extends Controller
         }
     }
 
+    public function updateCorrelative(Request $request){
+        try {
+            $requestById = ServiceRequest::where('id',$request['id'])->with('user','service')->first();
+
+            if($requestById->count() == 0){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró la solicitud.",
+                    "data" => []
+                ],404);
+            }
+
+            $requestById->correlativo = $request['correlativo'];
+            $requestById->save();
+
+            return response([
+                "success"=>true,
+                "message"=>"Se ha cambiado el estado de la solicitud correctamente.",
+                "data" => $requestById,
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error al intentar cambiar el correlativo de la solicitud.",
+                "data" => $e,
+            ],500);
+        }
+    }
+
     public function saveDates($id,Request $request){
         try {
             $requestById = ServiceRequest::where('id',$id)->with('user','service')->first();
