@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PivotServiceRequest;
 use App\Models\ServiceRequest;
 use App\Models\User;
 use App\Traits\CustomEncript;
@@ -20,14 +21,18 @@ class ServiceRequestController extends Controller
 
     public function store(Request $request){
         try {
-            if(!isset($request->service_id) || !isset($request->quantity) || !isset($request->price)){
+            if(!isset($request->servicesId) || !isset($request->quantity) || !isset($request->price)){
                 return response([
                     "success"=>false,
                     "message" => "Faltan datos para insertar."
                 ],200);
             }
 
-            $findService = ServiceRequest::where('service_id',$request->service_id)->where('user_id',Auth::user()->id)->where(function ($query){
+            $servicesId = $request->servicesId;
+
+            $findService = ServiceRequest::whereHas('services',function ($q,$servicesId) {
+                $q->whereIn('service_id',$servicesId);
+            })->where('user_id',Auth::user()->id)->where(function ($query){
                 $query->where('status', '!=', 'Completado');
             })->get();
 
@@ -46,19 +51,40 @@ class ServiceRequestController extends Controller
                 $generateCorrelative = $this->generate(null);
             }
 
-            $serviceRequest = ServiceRequest::create([
-                'user_id'=>Auth::user()->id,
-                'service_id'=>$request->service_id,
-                'quantity'=>$request->quantity,
-                'price'=>$request->price,
-                'correlativo'=>$generateCorrelative,
-                'iva'=>$request->iva,
-                'total'=>$request->total,
-                'expiration_date'=>$request->expirationDate,
-                'status'=>"Creado",
-                'emailList'=>json_encode($request->emails),
-                'created_at'=>Carbon::now()
-            ]);
+            //se inicializa la transaccion
+            DB::beginTransaction();
+            try {
+
+                $serviceRequest = ServiceRequest::create([
+                    'user_id'=>Auth::user()->id,
+                    'quantity'=>$request->quantity,
+                    'price'=>$request->price,
+                    'correlativo'=>$generateCorrelative,
+                    'iva'=>$request->iva,
+                    'total'=>$request->total,
+                    'expiration_date'=>$request->expirationDate,
+                    'status'=>"Creado",
+                    'emailList'=>json_encode($request->emails),
+                    'created_at'=>Carbon::now()
+                ]);
+
+                foreach ($request->servicesId as $serviceId) {
+                    PivotServiceRequest::create([
+                        'service_id'=>$serviceId,
+                        'service_requests_id'=>$serviceRequest->id,
+                    ]);
+                }
+
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollback();
+                return response([
+                    "success"=>false,
+                    "message" => "Ha ocurrido un error en el servidor con la transaccion.",
+                    "error" => $e->getMessage()
+                ],500);
+            }
+
 
             if(!empty($request->emails)){
                 //encriptar el id del servicio para la url
