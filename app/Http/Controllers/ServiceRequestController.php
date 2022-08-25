@@ -202,7 +202,7 @@ class ServiceRequestController extends Controller
                     $message->subject('Tu solicitud ha sido aprobada');
 
                     $pdf = \PDF::loadView('reports.serviceRequest', $data);
-                    $message->attachData($pdf->output(), "Solicitud-{$data['requestService']->id}.pdf");
+                    $message->attachData($pdf->output(), "{$data['requestService']->correlativo}.pdf");
                 }else{
                     $message->subject('Tu solicitud ha sido rechazada');
                 }

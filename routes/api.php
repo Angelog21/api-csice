@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/users','UserController@getUsers')->middleware('isNotClient');
+    Route::get('/users/destroy/{id}','UserController@deleteUser')->middleware('isAdminOrDirector');
     Route::get('/users/{status}/{id}','UserController@setStatusUser')->middleware('isNotClient');
     Route::post('/users/updateRole','UserController@setRoleUser')->middleware('isNotClient');
     Route::get('serviceRequest/download/{id}', 'ServiceRequestController@downloadRequestService');

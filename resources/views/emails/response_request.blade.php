@@ -7,16 +7,17 @@
     a través de nuestra plataforma.
     @if ($requestService->status == 'Aprobado')
         <p>
-            Es de nuestro agrado informarle que para culminar el proceso de su solicitud es necesario que adjunte a través de nuestra plataforma de Sistema de Gestión de Servicios de Firma electrónica los archivos correspondientes, es decir, en caso de ser: 
+            Es de nuestro agrado informarle que para culminar el proceso de su solicitud es necesario que adjunte a través de nuestra plataforma de Sistema de Gestión de Servicios de Firma electrónica los archivos correspondientes, es decir, en caso de ser:
 
             <ul>
                 <li>
                     Empleado Público adjuntar el RIF de la Institución, nombramiento o Gaceta y CI. del Signatario.
                 </li>
                 <li>
+                    Persona Natural adjuntar CI y RIF del signatario.
                 </li>
                 <li>
-                    Persona Jurídica adjuntar RIF de la empresa, CI del signatario y Acta Constitutiva y nombramiento 
+                    Persona Jurídica adjuntar RIF de la empresa, CI del signatario y Acta Constitutiva y nombramiento
                 </li>
             </ul>
         </p>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PaymentFile;
+use App\Models\ServiceRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserFile;
@@ -241,5 +242,28 @@ class UserController extends Controller
             "message"=>"No se encontró el archivo",
             "data" => []
         ],200);
+    }
+
+    public function deleteUser ($id = null) {
+        try {
+
+            PaymentFile::where('user_id',$id)->delete();
+            ServiceRequest::where('user_id',$id)->delete();
+            UserFile::where('user_id',$id)->delete();
+            User::where('id',$id)->delete();
+
+            return response([
+                "success"=>true,
+                "message"=>"Usuario Eliminado correctamente.",
+                "data" => []
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ocurrió un error en el servidor.",
+                "data" => $e
+            ],500);
+        }
+
     }
 }
