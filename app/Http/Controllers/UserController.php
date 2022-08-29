@@ -158,6 +158,18 @@ class UserController extends Controller
                 ]);
             }
 
+            if($request->file('nombramiento')){
+                $nombramiento = $request->file('nombramiento');
+                $nombreNombramiento = $nombramiento->getClientOriginalName();
+                Storage::disk('local')->put("public/{$user->id}/{$nombreNombramiento}",  File::get($nombramiento));
+                UserFile::create([
+                    'user_id'=>$user->id,
+                    'type'=>'nombramiento',
+                    'name'=>$nombreNombramiento,
+                    'url'=>"public/{$user->id}/{$nombreNombramiento}"
+                ]);
+            }
+
             if($request->file('paymentFile')){
                 $comprobante = $request->file('paymentFile');
                 $nombreComprobante = $comprobante->getClientOriginalName();
