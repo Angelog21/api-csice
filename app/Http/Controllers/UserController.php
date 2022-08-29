@@ -140,7 +140,7 @@ class UserController extends Controller
                 Storage::disk('local')->put("public/{$user->id}/{$nombreCedula}",  File::get($cedula));
                 UserFile::create([
                     'user_id'=>$user->id,
-                    'type'=>'cedula',
+                    'type'=>'Cédula',
                     'name'=>$nombreCedula,
                     'url'=>"public/{$user->id}/{$nombreCedula}"
                 ]);
@@ -152,7 +152,7 @@ class UserController extends Controller
                 Storage::disk('local')->put("public/{$user->id}/{$nombreRif}",  File::get($rif));
                 UserFile::create([
                     'user_id'=>$user->id,
-                    'type'=>'rif',
+                    'type'=>'RIF',
                     'name'=>$nombreRif,
                     'url'=>"public/{$user->id}/{$nombreRif}"
                 ]);
@@ -164,7 +164,7 @@ class UserController extends Controller
                 Storage::disk('local')->put("public/{$user->id}/{$nombreNombramiento}",  File::get($nombramiento));
                 UserFile::create([
                     'user_id'=>$user->id,
-                    'type'=>'nombramiento',
+                    'type'=>'Nombramiento',
                     'name'=>$nombreNombramiento,
                     'url'=>"public/{$user->id}/{$nombreNombramiento}"
                 ]);
