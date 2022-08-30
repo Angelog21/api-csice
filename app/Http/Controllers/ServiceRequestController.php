@@ -112,7 +112,7 @@ class ServiceRequestController extends Controller
     public function requestByResponse(){
         $user = auth()->user();
 
-        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","user")->get();
+        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","user","user.files","files")->get();
 
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;
