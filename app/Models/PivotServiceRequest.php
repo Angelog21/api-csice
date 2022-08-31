@@ -17,7 +17,13 @@ class PivotServiceRequest extends Model
 
     protected $fillable = [
         "service_id",
-        "service_requests_id"
+        "service_requests_id",
+        "quantity",
+        "subtotal",
+        "total",
+        "iva",
+        "iva_value",
+        "petro_quantity",
     ];
 
     public function serviceRequests(){

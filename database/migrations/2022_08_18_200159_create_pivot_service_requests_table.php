@@ -17,6 +17,12 @@ class CreatePivotServiceRequestsTable extends Migration
             $table->id();
             $table->foreignId('service_id')->constrained();
             $table->foreignId('service_requests_id')->constrained();
+            $table->float('petro_quantity');
+            $table->float('iva_value');
+            $table->float('subtotal');
+            $table->float('iva');
+            $table->float('total');
+            $table->integer('quantity');
             $table->timestamps();
         });
     }

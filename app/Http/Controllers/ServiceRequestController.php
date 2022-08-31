@@ -21,20 +21,23 @@ class ServiceRequestController extends Controller
 
     public function store(Request $request){
         try {
-            if(!isset($request->servicesId) || !isset($request->quantity) || !isset($request->price)){
+            if(!isset($request->services) || !isset($request->quantity) || !isset($request->price)){
                 return response([
                     "success"=>false,
                     "message" => "Faltan datos para insertar."
                 ],200);
             }
 
-            $servicesId = $request->servicesId;
+            foreach ($request->services as $service) {
+
+                $servicesId[] = $service->service;
+            }
 
             $findService = ServiceRequest::whereHas('services',function ($q,$servicesId) {
                 $q->whereIn('service_id',$servicesId);
-            })->where('user_id',Auth::user()->id)->where(function ($query){
-                $query->where('status', '!=', 'Completado');
-            })->get();
+            })
+            ->where('user_id',Auth::user()->id)
+            ->where('status', '!=', 'Completado')->get();
 
             if($findService->where('status','!=','Rechazado')->count() > 0){
                 return response([
