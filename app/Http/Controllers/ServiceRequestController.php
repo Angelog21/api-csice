@@ -138,7 +138,7 @@ class ServiceRequestController extends Controller
     public function requestByResponse(){
         $user = auth()->user();
 
-        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","user")->get();
+        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","user","user.files","files")->get();
 
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;
@@ -228,7 +228,7 @@ class ServiceRequestController extends Controller
                     $message->subject('Tu solicitud ha sido aprobada');
 
                     $pdf = \PDF::loadView('reports.serviceRequest', $data);
-                    $message->attachData($pdf->output(), "Solicitud-{$data['requestService']->id}.pdf");
+                    $message->attachData($pdf->output(), "{$data['requestService']->correlativo}.pdf");
                 }else{
                     $message->subject('Tu solicitud ha sido rechazada');
                 }
@@ -243,6 +243,35 @@ class ServiceRequestController extends Controller
             return response([
                 "success"=>false,
                 "message"=>"Ha ocurrido un error al intentar cambiar el estado de la solicitud.",
+                "data" => $e,
+            ],500);
+        }
+    }
+
+    public function updateCorrelative(Request $request){
+        try {
+            $requestById = ServiceRequest::where('id',$request['id'])->with('user','service')->first();
+
+            if($requestById->count() == 0){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró la solicitud.",
+                    "data" => []
+                ],404);
+            }
+
+            $requestById->correlativo = $request['correlativo'];
+            $requestById->save();
+
+            return response([
+                "success"=>true,
+                "message"=>"Se ha cambiado el estado de la solicitud correctamente.",
+                "data" => $requestById,
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error al intentar cambiar el correlativo de la solicitud.",
                 "data" => $e,
             ],500);
         }

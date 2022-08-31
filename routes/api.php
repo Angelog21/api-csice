@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/users','UserController@getUsers')->middleware('isNotClient');
+    Route::get('/users/destroy/{id}','UserController@deleteUser')->middleware('isAdminOrDirector');
     Route::get('/users/{status}/{id}','UserController@setStatusUser')->middleware('isNotClient');
     Route::post('/users/updateRole','UserController@setRoleUser')->middleware('isNotClient');
     Route::get('serviceRequest/download/{id}', 'ServiceRequestController@downloadRequestService');
@@ -42,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/requests/manage','ServiceRequestController@manageRequest')->middleware('isNotClient');
     Route::post('/requests/{id}/save-dates','ServiceRequestController@saveDates')->middleware('isNotClient');
     Route::post('/requests/{id}/finish','ServiceRequestController@requestFinish')->middleware('isNotClient');
+    Route::post('/requests/updateCorrelative','ServiceRequestController@updateCorrelative')->middleware('isAdminOrDirector');
     Route::get('/requests/all','ServiceRequestController@allRequests')->middleware('isAdminOrDirector');
     Route::get('/requests/pending','ServiceRequestController@requestByResponse')->middleware('isAdminOrDirector');
     Route::get('/requests/save/{action}/{id}','ServiceRequestController@saveResponse')->middleware('isAdminOrDirector');

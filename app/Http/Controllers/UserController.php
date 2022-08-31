@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PaymentFile;
+use App\Models\ServiceRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserFile;
@@ -139,7 +140,7 @@ class UserController extends Controller
                 Storage::disk('local')->put("public/{$user->id}/{$nombreCedula}",  File::get($cedula));
                 UserFile::create([
                     'user_id'=>$user->id,
-                    'type'=>'cedula',
+                    'type'=>'Cédula',
                     'name'=>$nombreCedula,
                     'url'=>"public/{$user->id}/{$nombreCedula}"
                 ]);
@@ -151,9 +152,21 @@ class UserController extends Controller
                 Storage::disk('local')->put("public/{$user->id}/{$nombreRif}",  File::get($rif));
                 UserFile::create([
                     'user_id'=>$user->id,
-                    'type'=>'rif',
+                    'type'=>'RIF',
                     'name'=>$nombreRif,
                     'url'=>"public/{$user->id}/{$nombreRif}"
+                ]);
+            }
+
+            if($request->file('nombramiento')){
+                $nombramiento = $request->file('nombramiento');
+                $nombreNombramiento = $nombramiento->getClientOriginalName();
+                Storage::disk('local')->put("public/{$user->id}/{$nombreNombramiento}",  File::get($nombramiento));
+                UserFile::create([
+                    'user_id'=>$user->id,
+                    'type'=>'Nombramiento',
+                    'name'=>$nombreNombramiento,
+                    'url'=>"public/{$user->id}/{$nombreNombramiento}"
                 ]);
             }
 
@@ -241,5 +254,28 @@ class UserController extends Controller
             "message"=>"No se encontró el archivo",
             "data" => []
         ],200);
+    }
+
+    public function deleteUser ($id = null) {
+        try {
+
+            PaymentFile::where('user_id',$id)->delete();
+            ServiceRequest::where('user_id',$id)->delete();
+            UserFile::where('user_id',$id)->delete();
+            User::where('id',$id)->delete();
+
+            return response([
+                "success"=>true,
+                "message"=>"Usuario Eliminado correctamente.",
+                "data" => []
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ocurrió un error en el servidor.",
+                "data" => $e
+            ],500);
+        }
+
     }
 }
