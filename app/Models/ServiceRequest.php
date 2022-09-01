@@ -11,6 +11,7 @@ class ServiceRequest extends Model
 
     protected $fillable = [
         "user_id",
+        "service_id",
         "price",
         "iva",
         "total",
@@ -35,6 +36,10 @@ class ServiceRequest extends Model
 
     public function services() {
         return $this->hasMany(PivotServiceRequest::class,"service_requests_id");
+    }
+
+    public function service() {
+        return $this->belongsTo(Service::class);
     }
 
     public function user() {

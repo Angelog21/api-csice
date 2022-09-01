@@ -30,10 +30,10 @@ class ServiceRequestController extends Controller
 
             foreach ($request->services as $service) {
 
-                $servicesId[] = $service->service;
+                $servicesId[] = $service["service"];
             }
 
-            $findService = ServiceRequest::whereHas('services',function ($q,$servicesId) {
+            $findService = ServiceRequest::whereHas('services',function ($q) use ($servicesId) {
                 $q->whereIn('service_id',$servicesId);
             })
             ->where('user_id',Auth::user()->id)
@@ -60,6 +60,7 @@ class ServiceRequestController extends Controller
 
                 $serviceRequest = ServiceRequest::create([
                     'user_id'=>Auth::user()->id,
+                    'service_id'=>$servicesId[0],
                     'quantity'=>$request->quantity,
                     'price'=>$request->price,
                     'correlativo'=>$generateCorrelative,
@@ -71,10 +72,16 @@ class ServiceRequestController extends Controller
                     'created_at'=>Carbon::now()
                 ]);
 
-                foreach ($request->servicesId as $serviceId) {
+                foreach ($request->services as $service) {
                     PivotServiceRequest::create([
-                        'service_id'=>$serviceId,
+                        'service_id'=>$service["service"],
                         'service_requests_id'=>$serviceRequest->id,
+                        'quantity'=>$service["quantity"],
+                        'subtotal'=>$service["subtotal"],
+                        'iva'=>$service["iva"],
+                        'total'=>$service["total"],
+                        'iva_value'=>$service["iva_value"],
+                        'petro_quantity'=>$service["petro_quantity"],
                     ]);
                 }
 
@@ -421,5 +428,36 @@ class ServiceRequestController extends Controller
 
     }
 
+    public function scriptNewStructure () {
+        try {
+            $allRequests = ServiceRequest::doesntHave('services')->with('service')->get();
+
+            foreach ($allRequests as $serviceRequest) {
+
+                PivotServiceRequest::create([
+                    'service_id'=>$serviceRequest->service->id,
+                    'service_requests_id'=>$serviceRequest->id,
+                    'quantity'=>$serviceRequest->quantity,
+                    'subtotal'=>$serviceRequest->price,
+                    'iva'=>$serviceRequest->iva,
+                    'total'=>$serviceRequest->total,
+                    'iva_value'=>$serviceRequest->service->iva_value,
+                    'petro_quantity'=>$serviceRequest->service->petro_quantity,
+                ]);
+            }
+
+            return response([
+                "success"=>true,
+                "message"=>"Recuperados",
+                "data" => $allRequests
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error en el servidor",
+                "data" => $e->getMessage()
+            ],500);
+        }
+    }
 
 }
