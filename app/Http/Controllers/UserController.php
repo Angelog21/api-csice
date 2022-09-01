@@ -201,7 +201,7 @@ class UserController extends Controller
             return response([
                 "success"=>false,
                 "message"=>"Ocurrió un error en el servidor.",
-                "data" => $e
+                "data" => $e->getMessage()
             ],500);
         }
     }
