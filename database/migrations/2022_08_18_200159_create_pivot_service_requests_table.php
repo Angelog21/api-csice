@@ -16,7 +16,7 @@ class CreatePivotServiceRequestsTable extends Migration
         Schema::create('pivot_service_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_id')->constrained();
-            $table->foreignId('service_requests_id')->constrained();
+            $table->foreignId('service_request_id')->constrained();
             $table->float('petro_quantity');
             $table->float('iva_value');
             $table->float('subtotal');

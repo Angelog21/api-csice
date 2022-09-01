@@ -133,7 +133,7 @@ class ServiceRequestController extends Controller
     public function myRequests(){
         $user = auth()->user();
 
-        $myRequests = ServiceRequest::where('user_id',$user->id)->with("service",'files')->get();
+        $myRequests = ServiceRequest::where('user_id',$user->id)->with("service","services",'files')->get();
 
         foreach ($myRequests as $value) {
             $value->serviceName = $value->service->name;
@@ -148,7 +148,7 @@ class ServiceRequestController extends Controller
     public function requestByResponse(){
         $user = auth()->user();
 
-        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","user","user.files","files")->get();
+        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","services","user","user.files","files")->get();
 
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;
@@ -171,7 +171,7 @@ class ServiceRequestController extends Controller
 
     public function allRequests(){
 
-        $allRequests = ServiceRequest::with("service","user")->get();
+        $allRequests = ServiceRequest::with("service","services","user")->get();
 
         return response([
             "success"=>true,
@@ -183,7 +183,7 @@ class ServiceRequestController extends Controller
         $user = auth()->user();
 
         $requestsByResponse = ServiceRequest::where('status','Aprobado')
-        ->with("service","user","user.files","files")->get();
+        ->with("service","services","user","user.files","files")->get();
 
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;
@@ -207,7 +207,7 @@ class ServiceRequestController extends Controller
 
     public function saveResponse($action,$id){
         try {
-            $requestById = ServiceRequest::where('id',$id)->with('user','service')->first();
+            $requestById = ServiceRequest::where('id',$id)->with('user','service',"services")->first();
 
 
             if($requestById->count() == 0){
@@ -260,7 +260,7 @@ class ServiceRequestController extends Controller
 
     public function updateCorrelative(Request $request){
         try {
-            $requestById = ServiceRequest::where('id',$request['id'])->with('user','service')->first();
+            $requestById = ServiceRequest::where('id',$request['id'])->with('user','service',"services")->first();
 
             if($requestById->count() == 0){
                 return response([
@@ -321,7 +321,7 @@ class ServiceRequestController extends Controller
     public function downloadRequestService($id)
     {
         try {
-            $requestService = ServiceRequest::where('id', $id)->with('service','user')->first();
+            $requestService = ServiceRequest::where('id', $id)->with('service',"services",'user')->first();
 
             if(!$requestService){
                 return response([
@@ -436,7 +436,7 @@ class ServiceRequestController extends Controller
 
                 PivotServiceRequest::create([
                     'service_id'=>$serviceRequest->service->id,
-                    'service_requests_id'=>$serviceRequest->id,
+                    'service_request_id'=>$serviceRequest->id,
                     'quantity'=>$serviceRequest->quantity,
                     'subtotal'=>$serviceRequest->price,
                     'iva'=>$serviceRequest->iva,

@@ -9,6 +9,8 @@ class PivotServiceRequest extends Model
 {
     use HasFactory;
 
+    protected $table = 'pivot_service_requests';
+
     protected $casts = [
         'created_at' => 'datetime:d-m-Y',
         'updated_at' => 'datetime:d-m-Y'
@@ -17,7 +19,7 @@ class PivotServiceRequest extends Model
 
     protected $fillable = [
         "service_id",
-        "service_requests_id",
+        "service_request_id",
         "quantity",
         "subtotal",
         "total",
@@ -27,11 +29,11 @@ class PivotServiceRequest extends Model
     ];
 
     public function serviceRequests(){
-        return $this->belongsToMany(ServiceRequest::class,"service_requests_id");
+        return $this->hasMany(ServiceRequest::class,"service_requests_id");
     }
 
     public function services() {
-        return $this->belongsToMany(Service::class,'service_id');
+        return $this->hasMany(Service::class,'service_id');
     }
 
 }

@@ -138,29 +138,23 @@
       <h3>Datos del servicio</h3>
       <table style="margin-top:10px" border="1">
           <tr>
-            <th>CÓDIGO</th>
-            <th style="min-width: 100px">DESCRIPCIÓN</th>
-            <th>UNIDAD</th>
+            <th style="min-width: 100px">SERVICIO</th>
+            <th>CANTIDAD DE PETROS</th>
+            <th>CANTIDAD SOLICITADA</th>
+            <th>SUBTOTAL</th>
+            <th>IVA</th>
+            <th>TOTAL</th>
           </tr>
-          <tr>
-            <td><b>{{$requestService->service->code}}</b></td>
-            <td><b>{{$requestService->service->name}}</b></td>
-            <td><b>{{$requestService->service->unit}}</b></td>
-          </tr>
-      </table>
-      <table style="margin-top:-3px" border="1">
-        <tr>
-          <th>CANTIDAD</th>
-          <th>SUBTOTAL</th>
-          <th>IVA</th>
-          <th>TOTAL</th>
-        </tr>
-        <tr>
-          <td><b>{{$requestService->quantity}}</b></td>
-          <td><b>{{number_format($requestService->price,2,'.',',')}} Bs.S</b></td>
-          <td><b>{{number_format($requestService->iva,2,'.',',')}} Bs.S</b></td>
-          <td><b>{{number_format($requestService->total,2,'.',',')}} Bs.S</b></td>
-        </tr>
+          @foreach ($requestService->services as $service)
+            <tr>
+                <td><b>{{$service->name}}</b></td>
+                <td><b>{{$service->pivot->petro_quantity}}</b></td>
+                <td><b>{{$service->pivot->quantity}}</b></td>
+                <td><b>{{number_format($service->pivot->subtotal,2,'.',',')}} Bs.S</b></td>
+                <td><b>{{number_format($service->pivot->iva,2,'.',',')}} Bs.S</b></td>
+                <td><b>{{number_format($service->pivot->total,2,'.',',')}} Bs.S</b></td>
+            </tr>
+        @endforeach
       </table>
       <table style="margin-top:-3px" border="1">
         <tr>
@@ -171,7 +165,7 @@
         </tr>
       </table>
     </div>
-    @if ($requestService->status != 'Creado' && $requestService->status != 'Rechazado') 
+    @if ($requestService->status != 'Creado' && $requestService->status != 'Rechazado')
       <div style="margin-top:10px;width:703px; text-align:center;">
         <h3>Datos de la respuesta</h3>
         <table style="margin-top:10px" border="1">
@@ -206,7 +200,7 @@
                   <br><br>
 
                   <ul style="text-align:start">
-                    <li><b>Datos completos de Facturación:</b> Nombre de la Empresa, RIF, Dirección Fiscal Completa, Persona Contacto, Número de Teléfono.															
+                    <li><b>Datos completos de Facturación:</b> Nombre de la Empresa, RIF, Dirección Fiscal Completa, Persona Contacto, Número de Teléfono.
                     </li>
                     <li><b>Datos del Cliente para el Informe:</b> Nombre de la Empresa, RIF, Dirección Fiscal Completa, Persona Contacto, Número de Teléfono.</li>
                   </ul>

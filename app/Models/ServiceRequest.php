@@ -35,7 +35,7 @@ class ServiceRequest extends Model
     ];
 
     public function services() {
-        return $this->hasMany(PivotServiceRequest::class,"service_requests_id");
+        return $this->belongsToMany(Service::class,'pivot_service_requests')->withPivot('total', 'subtotal', 'iva', 'iva_value','quantity', 'petro_quantity');
     }
 
     public function service() {

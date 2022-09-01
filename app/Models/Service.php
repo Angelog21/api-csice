@@ -23,6 +23,6 @@ class Service extends Model
     ];
 
     public function serviceRequests() {
-        return $this->hasMany(PivotServiceRequest::class);
+        return $this->belongsToMany(ServiceRequest::class,'pivot_service_requests');
     }
 }
