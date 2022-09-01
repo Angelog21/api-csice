@@ -126,7 +126,7 @@ class UserController extends Controller
         try {
             $user = User::find($request->get('user_id'));
 
-            if(!$user){
+            if (!$user) {
                 return response([
                     "success"=>false,
                     "message"=>"No se encontró el user.",
@@ -134,40 +134,48 @@ class UserController extends Controller
                 ],404);
             }
 
-            if($request->file('cedula')){
-                $cedula = $request->file('cedula');
-                $nombreCedula = $cedula->getClientOriginalName();
-                Storage::disk('local')->put("public/{$user->id}/{$nombreCedula}",  File::get($cedula));
-                UserFile::create([
-                    'user_id'=>$user->id,
-                    'type'=>'Cédula',
-                    'name'=>$nombreCedula,
-                    'url'=>"public/{$user->id}/{$nombreCedula}"
-                ]);
+            $personalFiles = UserFile::where('user_id',$user->id)->get();
+
+            if ($request->file('cedula')) {
+                if ($personalFiles->where('type','cedula')->count() == 0 || $personalFiles->where('type','Cédula')->count() == 0) {
+                    $cedula = $request->file('cedula');
+                    $nombreCedula = $cedula->getClientOriginalName();
+                    Storage::disk('local')->put("public/{$user->id}/{$nombreCedula}",  File::get($cedula));
+                    UserFile::create([
+                        'user_id'=>$user->id,
+                        'type'=>'Cédula',
+                        'name'=>$nombreCedula,
+                        'url'=>"public/{$user->id}/{$nombreCedula}"
+                    ]);
+                }
             }
 
             if($request->file('rif')){
-                $rif = $request->file('rif');
-                $nombreRif = $rif->getClientOriginalName();
-                Storage::disk('local')->put("public/{$user->id}/{$nombreRif}",  File::get($rif));
-                UserFile::create([
-                    'user_id'=>$user->id,
-                    'type'=>'RIF',
-                    'name'=>$nombreRif,
-                    'url'=>"public/{$user->id}/{$nombreRif}"
-                ]);
+                if ($personalFiles->where('type','RIF')->count() == 0 || $personalFiles->where('type','rif')->count() == 0) {
+                    $rif = $request->file('rif');
+                    $nombreRif = $rif->getClientOriginalName();
+                    Storage::disk('local')->put("public/{$user->id}/{$nombreRif}",  File::get($rif));
+                    UserFile::create([
+                        'user_id'=>$user->id,
+                        'type'=>'RIF',
+                        'name'=>$nombreRif,
+                        'url'=>"public/{$user->id}/{$nombreRif}"
+                    ]);
+                }
             }
 
             if($request->file('nombramiento')){
-                $nombramiento = $request->file('nombramiento');
-                $nombreNombramiento = $nombramiento->getClientOriginalName();
-                Storage::disk('local')->put("public/{$user->id}/{$nombreNombramiento}",  File::get($nombramiento));
-                UserFile::create([
-                    'user_id'=>$user->id,
-                    'type'=>'Nombramiento',
-                    'name'=>$nombreNombramiento,
-                    'url'=>"public/{$user->id}/{$nombreNombramiento}"
-                ]);
+                if ($personalFiles->where('type','nombramiento')->count() == 0 || $personalFiles->where('type','Nombramiento')->count() == 0) {
+                    $nombramiento = $request->file('nombramiento');
+                    $nombreNombramiento = $nombramiento->getClientOriginalName();
+                    Storage::disk('local')->put("public/{$user->id}/{$nombreNombramiento}",  File::get($nombramiento));
+                    UserFile::create([
+                        'user_id'=>$user->id,
+                        'type'=>'Nombramiento',
+                        'name'=>$nombreNombramiento,
+                        'url'=>"public/{$user->id}/{$nombreNombramiento}"
+                    ]);
+                }
             }
 
             if($request->file('paymentFile')){
@@ -208,19 +216,12 @@ class UserController extends Controller
 
             $files = UserFile::where('user_id',$user->id)->get();
 
-            if($files->where('type','cedula')->count() > 0 && $files->where('type','rif')->count() > 0){
-                return response([
-                    "success"=>true,
-                    "message"=>"Positivo",
-                    "data" => $files
-                ],200);
-            }
-
             return response([
                 "success"=>true,
-                "message"=>"Negativo",
-                "data" => []
+                "message"=>"Positivo",
+                "data" => $files
             ],200);
+
 
         } catch (\Exception $e) {
             return response([
