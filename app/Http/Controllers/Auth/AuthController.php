@@ -32,7 +32,7 @@ class AuthController extends Controller
                 $attr["role"] = $request->role;
             }
 
-            if(User::where('email',$attr["email"])->exists()){
+            if(User::where('email',strtolower($attr["email"]))->exists()){
                 return $this->error("El usuario que intenta ingresar ya existe.",200,[]);
             }
 
@@ -45,7 +45,7 @@ class AuthController extends Controller
                 'rif' => $attr['rif'],
                 'direction' => $attr['direction'],
                 'password' => bcrypt($attr['password']),
-                'email' => $attr['email'],
+                'email' => strtolower($attr['email']),
                 'role_id' => $attr["role"],
                 'confirmation_code'=>$attr["confirmation_code"],
                 'email_verified_at' => $attr['role'] != 4 ? new DateTime() : null
@@ -53,7 +53,7 @@ class AuthController extends Controller
             //si el rol no es el de cliente, no hace falta la verificación
             if($attr['role'] == 4){
                 Mail::send('emails.confirmation_code', $attr, function($message) use ($attr) {
-                    $message->to($attr['email'], $attr['name'])->subject('Por favor confirma tu correo');
+                    $message->to(strtolower($attr['email']), $attr['name'])->subject('Por favor confirma tu correo');
                 });
             }
 
