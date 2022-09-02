@@ -75,7 +75,7 @@ class ServiceRequestController extends Controller
                 foreach ($request->services as $service) {
                     PivotServiceRequest::create([
                         'service_id'=>$service["service"],
-                        'service_requests_id'=>$serviceRequest->id,
+                        'service_request_id'=>$serviceRequest->id,
                         'quantity'=>$service["quantity"],
                         'subtotal'=>$service["subtotal"],
                         'iva'=>$service["iva"],
