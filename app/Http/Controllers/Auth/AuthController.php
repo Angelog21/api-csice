@@ -25,19 +25,19 @@ class AuthController extends Controller
     {
         try {
             $attr = $request->all();
-            
+
             if(!isset($request->role)){
                 $attr["role"] = 4;
             }else{
                 $attr["role"] = $request->role;
             }
 
-            if(User::where('email',$attr["email"])->exists()){
+            if(User::where('email',strtolower($attr["email"]))->exists()){
                 return $this->error("El usuario que intenta ingresar ya existe.",200,[]);
             }
 
             $attr["confirmation_code"] = Str::random(35);
-    
+
             $user = User::create([
                 'name' => $attr['name'],
                 'social_reason' => $attr['social_reason'],
@@ -45,7 +45,7 @@ class AuthController extends Controller
                 'rif' => $attr['rif'],
                 'direction' => $attr['direction'],
                 'password' => bcrypt($attr['password']),
-                'email' => $attr['email'],
+                'email' => strtolower($attr['email']),
                 'role_id' => $attr["role"],
                 'confirmation_code'=>$attr["confirmation_code"],
                 'email_verified_at' => $attr['role'] != 4 ? new DateTime() : null
@@ -53,10 +53,10 @@ class AuthController extends Controller
             //si el rol no es el de cliente, no hace falta la verificación
             if($attr['role'] == 4){
                 Mail::send('emails.confirmation_code', $attr, function($message) use ($attr) {
-                    $message->to($attr['email'], $attr['name'])->subject('Por favor confirma tu correo');
+                    $message->to(strtolower($attr['email']), $attr['name'])->subject('Por favor confirma tu correo');
                 });
             }
-    
+
             return $this->success(["user"=>$user],"Usuario registrado correctamente debe verificar.");
         } catch (\Exception $e) {
             return $this->error("Ha ocurrido un error en el servidor",500,$e);
@@ -81,7 +81,7 @@ class AuthController extends Controller
         }
 
         $credentials["email"] = strtolower($credentials["email"]);
-        
+
         $status = User::where('email',$credentials["email"])->first();
 
         if($status){
@@ -117,8 +117,9 @@ class AuthController extends Controller
     {
         $user = User::where('confirmation_code', $code)->first();
 
-        if (!$user)
-            return $this->error("No se encontró el user",404,["success"=>false]);
+        if (!$user) {
+            return Redirect::to(env('FRONT_URL').'/login');
+        }
 
         $user->email_verified_at = Carbon::now();
         $user->confirmation_code = null;
@@ -126,11 +127,11 @@ class AuthController extends Controller
 
         return Redirect::to(env('FRONT_URL').'/');
     }
-    
+
     public function logout( Request $request ) {
         Auth::logout();
         $token = $request->header('Authorization');
-    
+
         try {
             JWTAuth::parseToken()->invalidate( $token );
             return $this->success([],'Se ha cerrado la sesión correctamente');
