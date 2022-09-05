@@ -254,7 +254,7 @@ class ServiceRequestController extends Controller
             return response([
                 "success"=>false,
                 "message"=>"Ha ocurrido un error al intentar cambiar el estado de la solicitud.",
-                "data" => $e,
+                "data" => $e->getMessage(),
             ],500);
         }
     }
