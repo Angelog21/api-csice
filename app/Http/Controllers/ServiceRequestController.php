@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ServiceRequestController extends Controller
 {
@@ -95,6 +96,10 @@ class ServiceRequestController extends Controller
                 ],500);
             }
 
+            Mail::send('emails.response_request', ["requestService" => $serviceRequest], function($message) use ($serviceRequest) {
+                $message->to($serviceRequest->user->email, $serviceRequest->user->email);
+                $message->subject('Tu solicitud se ha creado correctamente');
+            });
 
             if(!empty($request->emails)){
                 //encriptar el id del servicio para la url
@@ -109,6 +114,7 @@ class ServiceRequestController extends Controller
                         });
                     }
                 } catch (\Exception $e) {
+                    
                     return response([
                         "success"=>false,
                         "message" => "Ha ocurrido un error en el servidor al enviar correo.",
@@ -122,6 +128,7 @@ class ServiceRequestController extends Controller
                 "serviceRequest" => $serviceRequest
             ],200);
         } catch (\Exception $e) {
+            Log::info($e);
             return response([
                 "success"=>false,
                 "message" => "Ha ocurrido un error en el servidor.",
