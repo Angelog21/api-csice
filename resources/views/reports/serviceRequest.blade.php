@@ -180,9 +180,24 @@
             </tr>
         </table>
       </div>
+
+      <div style="margin-top:10px;width:703px; text-align:center;">
+        <h3>Firma del solicitante</h3>
+        <table style="margin-top:10px" border="1">
+            <tr>
+              <th>POR EL CLIENTE</th>
+            </tr>
+            <tr>
+              <td style="height: 70px !important"></td>
+            </tr>
+            <tr>
+              <td><b>Por favor notificar por correo electrónico la aceptación de la presente oferta.</b></td>
+            </tr>
+        </table>
+      </div>
     @endif
 
-    <div style="margin-top:10px;width:703px; text-align:center;">
+    <div style="margin-top:80px;width:703px; text-align:center;">
       <h3>Condiciones de la oferta</h3>
       <table style="margin-top:10px" border="1">
           <tr>
