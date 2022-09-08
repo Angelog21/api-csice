@@ -52,6 +52,9 @@ Route::middleware('auth')->group(function () {
     //-----------------------ESTADISTICAS-----------------------
     Route::get('/statistics/cardsUpper','StatisticsController@cardsUpper')->middleware('isNotClient');
     Route::get('/statistics/requestsByStatus','StatisticsController@requestsByStatus')->middleware('isNotClient');
+    Route::get('/statistics/requestsByYear','StatisticsController@requestsByYear')->middleware('isNotClient');
+    Route::get('/statistics/incomeByYear','StatisticsController@incomeByYear')->middleware('isNotClient');
+    Route::get('/statistics/mostRequestedServices','StatisticsController@mostRequestedServices')->middleware('isNotClient');
 
 
     Route::get('/get-files/{id?}',"UserController@getFiles");
