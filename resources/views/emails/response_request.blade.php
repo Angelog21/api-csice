@@ -11,6 +11,16 @@
 
             <ul>
                 <li>
+                    Comprobante de pago en formato (png, jpeg, jpg, pdf)
+                </li>
+            </ul>
+        </p>
+    @elseif ($requestService->status == 'Creado')
+        <p>
+            Es de nuestro agrado informarle que su solicitud ha sido creada, es necesario que adjunte a través de nuestra plataforma de Sistema de Gestión de Servicios de Firma electrónica los archivos correspondientes, es decir, en caso de ser:
+
+            <ul>
+                <li>
                     Empleado Público adjuntar el RIF de la Institución, nombramiento o Gaceta y CI. del Signatario.
                 </li>
                 <li>
