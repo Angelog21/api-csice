@@ -45,9 +45,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/requests/{id}/save-dates','ServiceRequestController@saveDates')->middleware('isNotClient');
     Route::post('/requests/{id}/finish','ServiceRequestController@requestFinish')->middleware('isNotClient');
     Route::post('/requests/updateCorrelative','ServiceRequestController@updateCorrelative')->middleware('isAdminOrDirector');
-    Route::get('/requests/all','ServiceRequestController@allRequests')->middleware('isAdminOrDirector');
+    Route::get('/requests/all','ServiceRequestController@allRequests')->middleware('isNotClient');
     Route::get('/requests/pending','ServiceRequestController@requestByResponse')->middleware('isAdminOrDirector');
     Route::get('/requests/save/{action}/{id}','ServiceRequestController@saveResponse')->middleware('isAdminOrDirector');
+
+    //-----------------------ESTADISTICAS-----------------------
+    Route::get('/statistics/cardsUpper','StatisticsController@cardsUpper')->middleware('isNotClient');
+    Route::get('/statistics/requestsByStatus','StatisticsController@requestsByStatus')->middleware('isNotClient');
+    Route::get('/statistics/requestsByYear','StatisticsController@requestsByYear')->middleware('isNotClient');
+    Route::get('/statistics/incomeByYear','StatisticsController@incomeByYear')->middleware('isNotClient');
+    Route::get('/statistics/mostRequestedServices','StatisticsController@mostRequestedServices')->middleware('isNotClient');
 
 
     Route::get('/get-files/{id?}',"UserController@getFiles");
