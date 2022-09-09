@@ -49,6 +49,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/requests/pending','ServiceRequestController@requestByResponse')->middleware('isAdminOrDirector');
     Route::get('/requests/save/{action}/{id}','ServiceRequestController@saveResponse')->middleware('isAdminOrDirector');
 
+    //-----------------------ESTADISTICAS-----------------------
+    Route::get('/statistics/cardsUpper','StatisticsController@cardsUpper')->middleware('isNotClient');
+    Route::get('/statistics/requestsByStatus','StatisticsController@requestsByStatus')->middleware('isNotClient');
+    Route::get('/statistics/requestsByYear','StatisticsController@requestsByYear')->middleware('isNotClient');
+    Route::get('/statistics/incomeByYear','StatisticsController@incomeByYear')->middleware('isNotClient');
+    Route::get('/statistics/mostRequestedServices','StatisticsController@mostRequestedServices')->middleware('isNotClient');
+
 
     Route::get('/get-files/{id?}',"UserController@getFiles");
     Route::post('/download-file',"UserController@downloadFile");
