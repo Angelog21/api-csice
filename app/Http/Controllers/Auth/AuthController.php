@@ -154,4 +154,12 @@ class AuthController extends Controller
             ], 500 );
         }
     }
+
+    public function resetPassword() {
+        return response()->json(['yes']);
+    }
+
+    public function setNewPassword() {
+        return response()->json(['yes']);
+    }
 }
