@@ -18,6 +18,21 @@ class ServiceController extends Controller
 
         foreach($services as $service){
             $service->iva_value = $service->iva_value*100;
+            switch ($service->service_to) {
+                case 'n':
+                    $name = "Persona natural";
+                    break;
+                case 'j':
+                    $name = "Persona jurídica";
+                    break;
+                case 'ep':
+                    $name = "Empleado público";
+                    break;
+                default:
+                    $name = "Sin selección";
+                    break;
+            }
+            $service->service_to_name = $name;
         }
 
         return $services->toJson();
@@ -51,6 +66,7 @@ class ServiceController extends Controller
             'name'=>$request->name,
             'unit'=>$request->unit,
             'code'=>$request->code,
+            'unit'=>"Certificación",
             'petro_quantity'=>$request->petro_quantity,
             'service_to'=>$request->service_to,
             'iva_value'=>$request->iva_value
@@ -94,7 +110,8 @@ class ServiceController extends Controller
             'name'=>$request->name,
             'code'=>$request->code,
             'petro_quantity'=>$request->petro_quantity,
-            'iva_value'=>$request->iva_value/100
+            'iva_value'=>$request->iva_value/100,
+            'service_to'=>$request->service_to,
         ]);
 
         $service->save();
