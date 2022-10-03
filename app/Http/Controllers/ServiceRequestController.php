@@ -114,7 +114,7 @@ class ServiceRequestController extends Controller
                         });
                     }
                 } catch (\Exception $e) {
-                    
+
                     return response([
                         "success"=>false,
                         "message" => "Ha ocurrido un error en el servidor al enviar correo.",

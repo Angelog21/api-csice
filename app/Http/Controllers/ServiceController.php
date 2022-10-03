@@ -31,7 +31,7 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        if(!isset($request->name) || !isset($request->code) || !isset($request->petro_quantity)){
+        if(!isset($request->name) || !isset($request->code) || !isset($request->petro_quantity) || !isset($request->service_to)){
             return response([
                 "success"=>false,
                 "message" => "Faltan datos para insertar."
@@ -52,6 +52,7 @@ class ServiceController extends Controller
             'unit'=>$request->unit,
             'code'=>$request->code,
             'petro_quantity'=>$request->petro_quantity,
+            'service_to'=>$request->service_to,
             'iva_value'=>$request->iva_value
         ]);
 
@@ -88,7 +89,7 @@ class ServiceController extends Controller
         }
 
         $service = Service::where('id',$id)->first();
-        
+
         $service->update([
             'name'=>$request->name,
             'code'=>$request->code,

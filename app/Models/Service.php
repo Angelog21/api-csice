@@ -14,6 +14,7 @@ class Service extends Model
         "name",
         "unit",
         "petro_quantity",
+        "service_to",
         "iva_value"
     ];
 
