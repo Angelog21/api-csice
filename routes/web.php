@@ -22,4 +22,4 @@ Route::get('logout','Auth\AuthController@logout');
 Route::get('register/verify/{code}', 'Auth\AuthController@verify');
 
 Route::get('reset/password', 'Auth\AuthController@resetPassword');
-Route::post('password', 'Auth\AuthController@setNewPassword');
+Route::post('reset/password', 'Auth\AuthController@setNewPassword');

@@ -155,11 +155,99 @@ class AuthController extends Controller
         }
     }
 
-    public function resetPassword() {
-        return response()->json(['yes']);
+    public function resetPassword(Request $request) {
+        try {
+            $credentials = $request->only('email');
+
+            if(!isset($credentials["email"])){
+                return response()->json([
+                    "error"=>true,
+                    "message"=>"Debe ingresar un correo"
+                ]);
+            }
+
+            $credentials["email"] = strtolower($credentials["email"]);
+
+            $user = User::where('email',$credentials["email"])->first();
+
+            if($user){
+                if($user->active == 0){
+                    return response()->json([
+                        "error"=>true,
+                        "message"=>"El usuario se encuentra inactivo en estos momentos."
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    "error"=>true,
+                    "message"=>"No se ha encontrado el usuario con el correo indicado."
+                ]);
+            }
+
+            $data = $user->toArray();
+            $data['remember_token'] = Str::random(35);
+
+            if ($data['remember_token']) {
+                $user->remember_token = $data['remember_token'];
+                $user->save();
+
+                Mail::send('emails.reset_password', $data, function($message) use ($data) {
+                    $message->to(strtolower($data['email']), $data['name'], $data['remember_token'])->subject('Por favor, no respondas el correo');
+                });
+
+                return $this->success([], "Se ha enviado a tu correo los pasos para recuperar tu acceso.");
+            }
+        } catch (\Exception $e) {
+            $this->reportError($e);
+            return response()->json($this->error("Ha ocurrido un error en el servidor",500,$e));
+        }
     }
 
-    public function setNewPassword() {
-        return response()->json(['yes']);
+    public function setNewPassword(Request $request) {
+        try {
+            $attr = $request->all();
+
+            if(!isset($attr["remember_token"]) || !isset($attr["password"])){
+                return response()->json([
+                    "error"=>true,
+                    "message"=>"Debe tener un token y la nueva contraseña"
+                ]);
+            }
+
+            $user = User::where('remember_token',$attr["remember_token"])->first();
+
+            if($user){
+                if($user->active == 0){
+                    return response()->json([
+                        "error"=>true,
+                        "message"=>"El usuario se encuentra inactivo en estos momentos."
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    "error"=>true,
+                    "message"=>"No se ha encontrado el usuario, asegurate de que tu token sea valido o prueba solicitar un nuevo restablecimiento de contraseña."
+                ]);
+            }
+
+            $data = $user->toArray();
+
+            if ($user->remember_token !== null) {
+                $user->remember_token = null;
+                $user->password = bcrypt($attr['password']);
+                $user->save();
+
+                Mail::send('emails.confirm_reset', $data, function($message) use ($data) {
+                    $message->to(strtolower($data['email']), $data['name'])->subject('Por favor, no respondas el correo');
+                });
+
+                return $this->success([], "Enhorabuena tu contraseña ha sido restablecida correctamente.");
+            } else {
+                return $this->error("Ha ocurrido un error, el token no existe, vuelve a solicitar el restablecimiento de contraseña y sigue los pasos",200);
+            }
+        } catch (\Exception $e) {
+            $this->reportError($e);
+            return response()->json($this->error("Ha ocurrido un error en el servidor",500,$e));
+        }
     }
 }
