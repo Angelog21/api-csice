@@ -7,7 +7,7 @@
     <p>Hemos recibido una solicitud de restablecimiento de contraseña, si no fuiste tu ignora este email.</p>
     <p>De lo contrario debes hacer click en el siguiente enlace:</p>
 
-    <a href="{{ url('/reset/password/' . $remember_token) }}">
+    <a href="{{env("FRONT_URL")}}/recoverPass/{{ $remember_token }}">
         Click para recuperar el acceso a tu cuenta.
     </a>
 </body>
