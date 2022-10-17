@@ -155,6 +155,12 @@ class AuthController extends Controller
         }
     }
 
+    private function expiredToken($date) {
+        $dateRegister = Carbon::parse($date);
+        $dateNow = Carbon::now();
+        return $dateRegister->diffInMinutes($dateNow) >= 60;
+    }
+
     public function resetPassword(Request $request) {
         try {
             $credentials = $request->only('email');
@@ -207,10 +213,17 @@ class AuthController extends Controller
         try {
             $attr = $request->all();
 
-            if(!isset($attr["remember_token"]) || !isset($attr["password"])){
+            if(!isset($attr["remember_token"]) || !isset($attr["password"]) || !isset($attr["confirm_password"])){
                 return response()->json([
                     "error"=>true,
-                    "message"=>"Debe tener un token y la nueva contraseña"
+                    "message"=>"Debe tener un token, la nueva contraseña y la confirmacion"
+                ]);
+            }
+
+            if($attr["password"] !== $attr["confirm_password"]){
+                return response()->json([
+                    "error"=>true,
+                    "message"=>"Deben coincidir la contraseña y la confirmacion"
                 ]);
             }
 
@@ -231,8 +244,10 @@ class AuthController extends Controller
             }
 
             $data = $user->toArray();
+            $updatedAtReal = $data['updated_at_real'];
+            unset($user->updated_at_real);
 
-            if ($user->remember_token !== null) {
+            if ($user->remember_token !== null && !$this->expiredToken($updatedAtReal)) {
                 $user->remember_token = null;
                 $user->password = bcrypt($attr['password']);
                 $user->save();
@@ -243,7 +258,7 @@ class AuthController extends Controller
 
                 return $this->success([], "Enhorabuena tu contraseña ha sido restablecida correctamente.");
             } else {
-                return $this->error("Ha ocurrido un error, el token no existe, vuelve a solicitar el restablecimiento de contraseña y sigue los pasos",200);
+                return $this->error("Ha ocurrido un error, el token no existe o ya esta espirado, vuelve a solicitar el restablecimiento de contraseña y sigue los pasos",200);
             }
         } catch (\Exception $e) {
             $this->reportError($e);

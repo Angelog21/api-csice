@@ -33,6 +33,11 @@ class User extends Authenticatable implements MustVerifyEmail,JWTSubject
         'password'
     ];
 
+    protected $appends = [
+        'updated_at_real'
+    ];
+
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -70,5 +75,10 @@ class User extends Authenticatable implements MustVerifyEmail,JWTSubject
 
     public function files(){
         return $this->hasMany(UserFile::class);
+    }
+
+    
+    public function getUpdatedAtRealAttribute() {
+        return $this['updated_at_real'] = $this->updated_at;
     }
 }
