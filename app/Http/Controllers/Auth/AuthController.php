@@ -192,6 +192,7 @@ class AuthController extends Controller
 
             $data = $user->toArray();
             $data['remember_token'] = Str::random(35);
+            unset($user->updated_at_real);
 
             if ($data['remember_token']) {
                 $user->remember_token = $data['remember_token'];
