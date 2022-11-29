@@ -37,6 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail,JWTSubject
         'updated_at_real'
     ];
 
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.

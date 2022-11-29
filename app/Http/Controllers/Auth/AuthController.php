@@ -16,6 +16,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Rules\Recaptcha;
 
 class AuthController extends Controller
 {
@@ -69,8 +70,20 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function login(Request $request)
+    public function login(Request $request, Recaptcha $recaptcha)
     {
+        $validatedData = $request->validate([
+            'recaptcha' => ['required', $recaptcha],
+        ]);
+
+        if (isset($validatedData->errors)) {
+            return response()->json([
+                "error"=>true,
+                "message"=>"El reCaptcha fallo.",
+                "detalle"=>$validatedData
+            ]);
+        }
+
         $credentials = $request->only('email', 'password');
 
         if(!isset($credentials["email"])){
