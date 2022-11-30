@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone');
+            $table->string('user_type')->nullable();
             $table->string('rif');
             $table->string('social_reason');
             $table->string('direction');

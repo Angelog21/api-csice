@@ -41,6 +41,7 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $attr['name'],
                 'social_reason' => $attr['social_reason'],
+                'user_type' => $attr['user_type'] || 'csice',
                 'phone' => $attr['phone'],
                 'rif' => $attr['rif'],
                 'direction' => $attr['direction'],
