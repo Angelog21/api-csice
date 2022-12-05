@@ -16,10 +16,40 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
     use ApiResponser;
+
+    protected $hCaptchaSecret;
+    protected $hCaptchaurl;
+
+    public function __construct()
+    {
+        $this->hCaptchaSecret = env('HCAPTCHA_SECRET');
+        $this->hCaptchaurl = env('HCAPTCHA_URL');
+    }
+
+    public function verifyHcaptcha($token)
+    {
+        $data = [
+            'secret' => $this->hCaptchaSecret,
+            'response' => $token
+        ];
+
+        try {
+            $result = Http::asForm()
+                ->accept('application/json')
+                ->post($this->hCaptchaurl, $data)
+                ->json();
+        } catch (\Throwable $th) {
+            $this->reportError($th);
+            return false;
+        }
+
+        return $result;
+    }
 
     public function register(Request $request)
     {
@@ -71,6 +101,22 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        if (!$request->has('hCaptcha') || !$request->hCaptcha) {
+            return response()->json([
+                "error"=>true,
+                "message"=>"Debe completar el captcha"
+            ]);
+        }
+
+        $result = $this->verifyHcaptcha($request->hCaptcha);
+
+        if (!$result->success) {
+            return response()->json([
+                "error"=>true,
+                "message"=>"Fallo al validar el captcha"
+            ]);
+        }
+
         $credentials = $request->only('email', 'password');
 
         if(!isset($credentials["email"])){
