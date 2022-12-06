@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ServiceRequestController extends Controller
 {
@@ -114,7 +115,7 @@ class ServiceRequestController extends Controller
                         });
                     }
                 } catch (\Exception $e) {
-                    
+
                     return response([
                         "success"=>false,
                         "message" => "Ha ocurrido un error en el servidor al enviar correo.",
@@ -465,6 +466,25 @@ class ServiceRequestController extends Controller
                 "message"=>"Ha ocurrido un error en el servidor",
                 "data" => $e->getMessage()
             ],500);
+        }
+    }
+
+    public function getRequestsByStatus ($status) {
+        try {
+
+            $requestsByStatus = ServiceRequest::where('status',$status)->with("services","user")->get();
+
+            return response([
+                "success"=>true,
+                "data" => $requestsByStatus
+            ],200);
+
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>'Ha ocurrido un error en el servidor',
+                "data" => $e
+            ],200);
         }
     }
 
