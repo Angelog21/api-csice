@@ -261,7 +261,9 @@ class UserController extends Controller
         try {
 
             PaymentFile::where('user_id',$id)->delete();
-            ServiceRequest::where('user_id',$id)->delete();
+            $servicesRequests = ServiceRequest::where('user_id',$id)->get();
+            $servicesRequests->services()->detach();
+            $servicesRequests->delete();
             UserFile::where('user_id',$id)->delete();
             User::where('id',$id)->delete();
 
