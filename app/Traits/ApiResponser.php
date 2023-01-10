@@ -81,4 +81,10 @@ trait ApiResponser
         Log::info('Line: ' . $error->getLine());
         Log::info('===================================================');
     }
+
+	public function printLog($print) {
+		Log::info('====================== INFO ======================');
+		Log::info($print);
+		Log::info('===================================================');
+	}
 }
