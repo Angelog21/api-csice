@@ -21,6 +21,5 @@ Route::post('login','Auth\AuthController@login');
 Route::get('logout','Auth\AuthController@logout');
 Route::get('register/verify/{code}', 'Auth\AuthController@verify');
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('serviceRequest/download/{id}', 'ServiceRequestController@downloadRequestService');
-});
+Route::get('reset/password', 'Auth\AuthController@resetPassword');
+Route::post('reset/password', 'Auth\AuthController@setNewPassword');

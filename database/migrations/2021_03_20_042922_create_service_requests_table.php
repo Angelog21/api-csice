@@ -16,11 +16,11 @@ class CreateServiceRequestsTable extends Migration
         Schema::create('service_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('service_id')->constrained();
             $table->double('price',20,2);
             $table->double('iva',20,2);
             $table->double('total',20,2);
             $table->integer('quantity');
+            $table->string('correlativo')->nullable();
             $table->string('status')->default("Creado");
             $table->text('observation')->nullable();
             $table->text('emailList')->nullable();

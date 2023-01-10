@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/user',"Auth\AuthController@register");
 Route::post('/saveFiles',"UserController@saveFiles");
 Route::post('/save-client',"ClientController@store");
+Route::get('/restructureNewData','ServiceRequestController@scriptNewStructure');
 
 Route::middleware('auth')->group(function () {
 
@@ -26,7 +27,10 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/users','UserController@getUsers')->middleware('isNotClient');
+    Route::get('/users/destroy/{id}','UserController@deleteUser')->middleware('isAdminOrDirector');
     Route::get('/users/{status}/{id}','UserController@setStatusUser')->middleware('isNotClient');
+    Route::post('/users/updateRole','UserController@setRoleUser')->middleware('isNotClient');
+    Route::get('serviceRequest/download/{id}', 'ServiceRequestController@downloadRequestService');
 
     //-----------------SERVICIOS--------------------
     Route::get('/services','ServiceController@index');
@@ -40,8 +44,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/requests/manage','ServiceRequestController@manageRequest')->middleware('isNotClient');
     Route::post('/requests/{id}/save-dates','ServiceRequestController@saveDates')->middleware('isNotClient');
     Route::post('/requests/{id}/finish','ServiceRequestController@requestFinish')->middleware('isNotClient');
+    Route::post('/requests/updateCorrelative','ServiceRequestController@updateCorrelative')->middleware('isAdminOrDirector');
+    Route::get('/requests/all','ServiceRequestController@allRequests')->middleware('isNotClient');
     Route::get('/requests/pending','ServiceRequestController@requestByResponse')->middleware('isAdminOrDirector');
+    Route::get('/requests/by-status/{:status}','ServiceRequestController@getRequestsByStatus')->middleware('isNotClient');
     Route::get('/requests/save/{action}/{id}','ServiceRequestController@saveResponse')->middleware('isAdminOrDirector');
+
+    //-----------------------ESTADISTICAS-----------------------
+    Route::get('/statistics/cardsUpper','StatisticsController@cardsUpper')->middleware('isNotClient');
+    Route::get('/statistics/requestsByStatus','StatisticsController@requestsByStatus')->middleware('isNotClient');
+    Route::get('/statistics/requestsByYear','StatisticsController@requestsByYear')->middleware('isNotClient');
+    Route::get('/statistics/incomeByYear','StatisticsController@incomeByYear')->middleware('isNotClient');
+    Route::get('/statistics/mostRequestedServices','StatisticsController@mostRequestedServices')->middleware('isNotClient');
+
 
     Route::get('/get-files/{id?}',"UserController@getFiles");
     Route::post('/download-file',"UserController@downloadFile");

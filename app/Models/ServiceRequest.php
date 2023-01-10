@@ -21,13 +21,25 @@ class ServiceRequest extends Model
         "completed_at",
         "expiration_date",
         "start_date",
+        "correlativo",
         "end_date",
         "observation",
         "emailList",
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:d-m-Y',
+        'updated_at' => 'datetime:d-m-Y',
+        'expiration_date' => 'datetime:d-m-Y',
+        'start_date' => 'datetime:d-m-Y'
+    ];
+
+    public function services() {
+        return $this->belongsToMany(Service::class,'pivot_service_requests')->withPivot('total', 'subtotal', 'iva', 'iva_value','quantity', 'petro_quantity');
+    }
+
     public function service() {
-        return $this->belongsTo(Service::class,'service_id');
+        return $this->belongsTo(Service::class);
     }
 
     public function user() {
