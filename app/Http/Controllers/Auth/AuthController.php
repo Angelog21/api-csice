@@ -102,21 +102,21 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        if (!$request->has('hCaptcha') || !$request->hCaptcha) {
-            return response()->json([
-                "error"=>true,
-                "message"=>"Debe completar el captcha"
-            ]);
-        }
+        // if (!$request->has('hCaptcha') || !$request->hCaptcha) {
+        //     return response()->json([
+        //         "error"=>true,
+        //         "message"=>"Debe completar el captcha"
+        //     ]);
+        // }
 
-        $result = $this->verifyHcaptcha($request->hCaptcha);
+        // $result = $this->verifyHcaptcha($request->hCaptcha);
 
-        if (!$result->success) {
-            return response()->json([
-                "error"=>true,
-                "message"=>"Fallo al validar el captcha"
-            ]);
-        }
+        // if (!$result->success) {
+        //     return response()->json([
+        //         "error"=>true,
+        //         "message"=>"Fallo al validar el captcha"
+        //     ]);
+        // }
 
         $credentials = $request->only('email', 'password');
 
@@ -246,7 +246,7 @@ class AuthController extends Controller
                 $user->save();
 
                 Mail::send('emails.reset_password', $data, function($message) use ($data) {
-                    $message->to(strtolower($data['email']), $data['name'], $data['remember_token'])->subject('Por favor, no respondas el correo');
+                    $message->to(strtolower($data['email']), $data['name'], $data['remember_token'])->subject('Restablecimiento de contraseña');
                 });
 
                 return $this->success([], "Se ha enviado a tu correo los pasos para recuperar tu acceso.");
@@ -301,7 +301,7 @@ class AuthController extends Controller
                 $user->save();
 
                 Mail::send('emails.confirm_reset', $data, function($message) use ($data) {
-                    $message->to(strtolower($data['email']), $data['name'])->subject('Por favor, no respondas el correo');
+                    $message->to(strtolower($data['email']), $data['name'])->subject('Restablecimiento de contraseña exitoso');
                 });
 
                 return $this->success([], "Enhorabuena tu contraseña ha sido restablecida correctamente.");

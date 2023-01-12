@@ -62,7 +62,7 @@ class ServiceRequestController extends Controller
 
                 $serviceRequest = ServiceRequest::create([
                     'user_id'=>Auth::user()->id,
-                    'service_id'=>$servicesId[0],
+                    'service_id'=>$servicesId[0]["id"],
                     'quantity'=>$request->quantity,
                     'price'=>$request->price,
                     'correlativo'=>$generateCorrelative,
@@ -76,7 +76,7 @@ class ServiceRequestController extends Controller
 
                 foreach ($request->services as $service) {
                     PivotServiceRequest::create([
-                        'service_id'=>$service["service"],
+                        'service_id'=>$service["service"]["id"],
                         'service_request_id'=>$serviceRequest->id,
                         'quantity'=>$service["quantity"],
                         'subtotal'=>$service["subtotal"],
