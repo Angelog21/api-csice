@@ -25,7 +25,7 @@ class CreateServiceRequestsTable extends Migration
             $table->text('observation')->nullable();
             $table->text('emailList')->nullable();
             $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->date('start_time')->nullable();
             $table->timestamp('expiration_date')->nullable();
             $table->timestamp('responsed_at')->nullable();
             $table->timestamp('completed_at')->nullable();
