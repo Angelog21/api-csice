@@ -26,7 +26,7 @@ trait GenerateCorrelative
 	protected function generate($lastCorrelative)
 	{
 		if (!$lastCorrelative) {
-			return 'OST-80-22154';
+			return 'OST-80-23001';
 		}
 
 		$lastNumbers = substr($lastCorrelative,9);
@@ -39,7 +39,7 @@ trait GenerateCorrelative
 			return "OST-80-{$year}{$lastNumbers}";
 
 		}else{
-			return "OST-80-{$year}1";
+			return "OST-80-{$year}001";
 		}
 	}
 }
