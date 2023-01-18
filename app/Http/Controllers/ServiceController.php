@@ -18,6 +18,21 @@ class ServiceController extends Controller
 
         foreach($services as $service){
             $service->iva_value = $service->iva_value*100;
+            switch ($service->service_to) {
+                case 'n':
+                    $name = "Persona natural";
+                    break;
+                case 'j':
+                    $name = "Persona jurídica";
+                    break;
+                case 'ep':
+                    $name = "Empleado público";
+                    break;
+                default:
+                    $name = "Sin selección";
+                    break;
+            }
+            $service->service_to_name = $name;
         }
 
         return $services->toJson();
@@ -31,7 +46,7 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        if(!isset($request->name) || !isset($request->code) || !isset($request->petro_quantity)){
+        if(!isset($request->name) || !isset($request->code) || !isset($request->petro_quantity) || !isset($request->service_to)){
             return response([
                 "success"=>false,
                 "message" => "Faltan datos para insertar."
@@ -51,7 +66,9 @@ class ServiceController extends Controller
             'name'=>$request->name,
             'unit'=>$request->unit,
             'code'=>$request->code,
+            'unit'=>"Certificación",
             'petro_quantity'=>$request->petro_quantity,
+            'service_to'=>$request->service_to,
             'iva_value'=>$request->iva_value
         ]);
 
@@ -88,12 +105,13 @@ class ServiceController extends Controller
         }
 
         $service = Service::where('id',$id)->first();
-        
+
         $service->update([
             'name'=>$request->name,
             'code'=>$request->code,
             'petro_quantity'=>$request->petro_quantity,
-            'iva_value'=>$request->iva_value/100
+            'iva_value'=>$request->iva_value/100,
+            'service_to'=>$request->service_to,
         ]);
 
         $service->save();

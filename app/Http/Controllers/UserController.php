@@ -275,7 +275,11 @@ class UserController extends Controller
         try {
 
             PaymentFile::where('user_id',$id)->delete();
-            ServiceRequest::where('user_id',$id)->delete();
+            $servicesRequests = ServiceRequest::where('user_id',$id)->get();
+            foreach ($servicesRequests as $s) {
+                $s->services()->detach();
+                $s->delete();
+            }
             UserFile::where('user_id',$id)->delete();
             User::where('id',$id)->delete();
 
@@ -288,7 +292,7 @@ class UserController extends Controller
             return response([
                 "success"=>false,
                 "message"=>"Ocurrió un error en el servidor.",
-                "data" => $e
+                "data" => $e->getMessage()
             ],500);
         }
 
