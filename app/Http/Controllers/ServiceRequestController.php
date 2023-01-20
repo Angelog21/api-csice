@@ -327,6 +327,37 @@ class ServiceRequestController extends Controller
         }
     }
 
+    public function saveClientDate($id,Request $request){
+        try {
+            $requestById = ServiceRequest::where('id',$id)->first();
+
+
+            if(!$requestById){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró la solicitud.",
+                    "data" => []
+                ],404);
+            }
+
+            $requestById->start_date = new DateTime($request->selectedDate);
+            $requestById->end_date = new DateTime($request->selectedDate);
+            $requestById->save();
+
+            return response([
+                "success"=>true,
+                "message"=>"Se ha actualizado las fechas de gestión de la solicitud correctamente.",
+                "data" => $requestById,
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error al intentar cambiar las fechas de la solicitud.",
+                "data" => $e,
+            ],500);
+        }
+    }
+
     public function downloadRequestService($id)
     {
         try {
