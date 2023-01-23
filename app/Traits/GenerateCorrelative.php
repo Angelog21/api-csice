@@ -34,7 +34,7 @@ trait GenerateCorrelative
 		$year = Carbon::now()->format('y');
 		if ($lastNumbers) {
 
-			++$lastNumbers;
+			$lastNumbers = str_pad(++$lastNumbers,3,"0",STR_PAD_LEFT);
 
 			return "OST-80-{$year}{$lastNumbers}";
 
