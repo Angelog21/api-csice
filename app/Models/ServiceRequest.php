@@ -46,6 +46,10 @@ class ServiceRequest extends Model
         return $this->belongsTo(User::class,'user_id');
     }
 
+    public function clients() {
+        return $this->hasMany(Client::class);
+    }
+
     public function files() {
         return $this->hasMany(PaymentFile::class,"service_requests_id");
     }
