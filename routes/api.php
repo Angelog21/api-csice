@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/requests/updateCorrelative','ServiceRequestController@updateCorrelative')->middleware('isAdminOrDirector');
     Route::get('/requests/all','ServiceRequestController@allRequests')->middleware('isNotClient');
     Route::get('/requests/pending','ServiceRequestController@requestByResponse')->middleware('isAdminOrDirector');
+    Route::get('/requests/review','ServiceRequestController@requestByReview')->middleware('isNotClient');
     Route::get('/requests/by-status/{:status}','ServiceRequestController@getRequestsByStatus')->middleware('isNotClient');
     Route::get('/requests/save/{action}/{id}','ServiceRequestController@saveResponse')->middleware('isAdminOrDirector');
 

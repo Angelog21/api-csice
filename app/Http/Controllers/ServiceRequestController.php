@@ -153,10 +153,26 @@ class ServiceRequestController extends Controller
         ],200);
     }
 
+    public function requestByReview(){
+        $user = auth()->user();
+
+        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","services","user")->get();
+
+        foreach ($requestsByResponse as $value) {
+            $value->serviceName = $value->service->name;
+            $value->userName = $value->user->name;
+        }
+
+        return response([
+            "success"=>true,
+            "data" => $requestsByResponse
+        ],200);
+    }
+
     public function requestByResponse(){
         $user = auth()->user();
 
-        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","services","user","user.files","files")->get();
+        $requestsByResponse = ServiceRequest::where('status','Revisado')->with("service","services","user")->get();
 
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;
@@ -229,8 +245,10 @@ class ServiceRequestController extends Controller
 
             if($action == "aprobar"){
                 $status = "Aprobado";
-            }else{
+            } elseif ($action == "rechazar"){
                 $status = "Rechazado";
+            } elseif ($action == "revisar") {
+                $status = "Revisado";
             }
 
             $requestById->status = $status;
