@@ -68,4 +68,10 @@ Route::middleware('auth')->group(function () {
     //---------------------------------ROLES-------------------------
     Route::get('/roles',"RoleController@index");
 
+    //---------------------------------- CLIENTES ----------------------------------------------------
+
+    Route::post('/clients/{requestId}',"ClientController@index");
+    Route::post('/clients/save-files',"ClientController@saveFiles");
+
+
 });
