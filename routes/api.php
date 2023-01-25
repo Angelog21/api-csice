@@ -70,7 +70,7 @@ Route::middleware('auth')->group(function () {
 
     //---------------------------------- CLIENTES ----------------------------------------------------
 
-    Route::post('/clients/{requestId}',"ClientController@index");
+    Route::get('/clients/{requestId}',"ClientController@index");
     Route::post('/clients/save-files',"ClientController@saveFiles");
 
 
