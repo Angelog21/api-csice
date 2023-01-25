@@ -178,6 +178,20 @@ class UserController extends Controller
                 }
             }
 
+            if($request->file('acta')){
+                if ( $personalFiles->where('type','Acta Constitutiva')->count() == 0) {
+                    $file = $request->file('acta');
+                    $nombreFile = $file->getClientOriginalName();
+                    Storage::disk('local')->put("public/{$user->id}/{$nombreFile}",  File::get($file));
+                    UserFile::create([
+                        'user_id'=>$user->id,
+                        'type'=>'Acta Constitutiva',
+                        'name'=>$nombreFile,
+                        'url'=>"public/{$user->id}/{$nombreFile}"
+                    ]);
+                }
+            }
+
             if($request->file('paymentFile')){
                 $comprobante = $request->file('paymentFile');
                 $nombreComprobante = $comprobante->getClientOriginalName();

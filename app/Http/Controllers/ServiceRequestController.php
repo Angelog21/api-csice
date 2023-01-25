@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ServiceRequestController extends Controller
 {
@@ -61,7 +62,7 @@ class ServiceRequestController extends Controller
 
                 $serviceRequest = ServiceRequest::create([
                     'user_id'=>Auth::user()->id,
-                    'service_id'=>$servicesId[0],
+                    'service_id'=>$servicesId[0]["id"],
                     'quantity'=>$request->quantity,
                     'price'=>$request->price,
                     'correlativo'=>$generateCorrelative,
@@ -75,7 +76,7 @@ class ServiceRequestController extends Controller
 
                 foreach ($request->services as $service) {
                     PivotServiceRequest::create([
-                        'service_id'=>$service["service"],
+                        'service_id'=>$service["service"]["id"],
                         'service_request_id'=>$serviceRequest->id,
                         'quantity'=>$service["quantity"],
                         'subtotal'=>$service["subtotal"],
@@ -152,10 +153,26 @@ class ServiceRequestController extends Controller
         ],200);
     }
 
+    public function requestByReview(){
+        $user = auth()->user();
+
+        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","services","user")->get();
+
+        foreach ($requestsByResponse as $value) {
+            $value->serviceName = $value->service->name;
+            $value->userName = $value->user->name;
+        }
+
+        return response([
+            "success"=>true,
+            "data" => $requestsByResponse
+        ],200);
+    }
+
     public function requestByResponse(){
         $user = auth()->user();
 
-        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","services","user","user.files","files")->get();
+        $requestsByResponse = ServiceRequest::where('status','Revisado')->with("service","services","user")->get();
 
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;
@@ -228,8 +245,10 @@ class ServiceRequestController extends Controller
 
             if($action == "aprobar"){
                 $status = "Aprobado";
-            }else{
+            } elseif ($action == "rechazar"){
                 $status = "Rechazado";
+            } elseif ($action == "revisar") {
+                $status = "Revisado";
             }
 
             $requestById->status = $status;
@@ -310,6 +329,37 @@ class ServiceRequestController extends Controller
 
             $requestById->start_date = new DateTime($request->start_date);
             $requestById->end_date = new DateTime($request->end_date);
+            $requestById->save();
+
+            return response([
+                "success"=>true,
+                "message"=>"Se ha actualizado las fechas de gestión de la solicitud correctamente.",
+                "data" => $requestById,
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error al intentar cambiar las fechas de la solicitud.",
+                "data" => $e,
+            ],500);
+        }
+    }
+
+    public function saveClientDate($id,Request $request){
+        try {
+            $requestById = ServiceRequest::where('id',$id)->first();
+
+
+            if(!$requestById){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró la solicitud.",
+                    "data" => []
+                ],404);
+            }
+
+            $requestById->start_date = new DateTime($request->selectedDate);
+            $requestById->end_date = new DateTime($request->selectedDate);
             $requestById->save();
 
             return response([
@@ -465,6 +515,25 @@ class ServiceRequestController extends Controller
                 "message"=>"Ha ocurrido un error en el servidor",
                 "data" => $e->getMessage()
             ],500);
+        }
+    }
+
+    public function getRequestsByStatus ($status) {
+        try {
+
+            $requestsByStatus = ServiceRequest::where('status',$status)->with("services","user")->get();
+
+            return response([
+                "success"=>true,
+                "data" => $requestsByStatus
+            ],200);
+
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>'Ha ocurrido un error en el servidor',
+                "data" => $e
+            ],200);
         }
     }
 
