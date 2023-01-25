@@ -26,7 +26,7 @@ trait GenerateCorrelative
 	protected function generate($lastCorrelative)
 	{
 		if (!$lastCorrelative) {
-			return 'OST-80-22154';
+			return 'OST-80-23001';
 		}
 
 		$lastNumbers = substr($lastCorrelative,9);
@@ -34,12 +34,12 @@ trait GenerateCorrelative
 		$year = Carbon::now()->format('y');
 		if ($lastNumbers) {
 
-			++$lastNumbers;
+			$lastNumbers = str_pad(++$lastNumbers,3,"0",STR_PAD_LEFT);
 
 			return "OST-80-{$year}{$lastNumbers}";
 
 		}else{
-			return "OST-80-{$year}1";
+			return "OST-80-{$year}001";
 		}
 	}
 }
