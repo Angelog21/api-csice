@@ -43,10 +43,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/requests/me','ServiceRequestController@myRequests');
     Route::get('/requests/manage','ServiceRequestController@manageRequest')->middleware('isNotClient');
     Route::post('/requests/{id}/save-dates','ServiceRequestController@saveDates')->middleware('isNotClient');
+    Route::post('/requests/{id}/save-client-date','ServiceRequestController@saveClientDate');
     Route::post('/requests/{id}/finish','ServiceRequestController@requestFinish')->middleware('isNotClient');
     Route::post('/requests/updateCorrelative','ServiceRequestController@updateCorrelative')->middleware('isAdminOrDirector');
     Route::get('/requests/all','ServiceRequestController@allRequests')->middleware('isNotClient');
     Route::get('/requests/pending','ServiceRequestController@requestByResponse')->middleware('isAdminOrDirector');
+    Route::get('/requests/review','ServiceRequestController@requestByReview')->middleware('isNotClient');
     Route::get('/requests/by-status/{:status}','ServiceRequestController@getRequestsByStatus')->middleware('isNotClient');
     Route::get('/requests/save/{action}/{id}','ServiceRequestController@saveResponse')->middleware('isAdminOrDirector');
 

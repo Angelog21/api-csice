@@ -153,10 +153,26 @@ class ServiceRequestController extends Controller
         ],200);
     }
 
+    public function requestByReview(){
+        $user = auth()->user();
+
+        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","services","user")->get();
+
+        foreach ($requestsByResponse as $value) {
+            $value->serviceName = $value->service->name;
+            $value->userName = $value->user->name;
+        }
+
+        return response([
+            "success"=>true,
+            "data" => $requestsByResponse
+        ],200);
+    }
+
     public function requestByResponse(){
         $user = auth()->user();
 
-        $requestsByResponse = ServiceRequest::where('status','Creado')->with("service","services","user","user.files","files")->get();
+        $requestsByResponse = ServiceRequest::where('status','Revisado')->with("service","services","user")->get();
 
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;
@@ -229,8 +245,10 @@ class ServiceRequestController extends Controller
 
             if($action == "aprobar"){
                 $status = "Aprobado";
-            }else{
+            } elseif ($action == "rechazar"){
                 $status = "Rechazado";
+            } elseif ($action == "revisar") {
+                $status = "Revisado";
             }
 
             $requestById->status = $status;
@@ -311,6 +329,37 @@ class ServiceRequestController extends Controller
 
             $requestById->start_date = new DateTime($request->start_date);
             $requestById->end_date = new DateTime($request->end_date);
+            $requestById->save();
+
+            return response([
+                "success"=>true,
+                "message"=>"Se ha actualizado las fechas de gestión de la solicitud correctamente.",
+                "data" => $requestById,
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error al intentar cambiar las fechas de la solicitud.",
+                "data" => $e,
+            ],500);
+        }
+    }
+
+    public function saveClientDate($id,Request $request){
+        try {
+            $requestById = ServiceRequest::where('id',$id)->first();
+
+
+            if(!$requestById){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró la solicitud.",
+                    "data" => []
+                ],404);
+            }
+
+            $requestById->start_date = new DateTime($request->selectedDate);
+            $requestById->end_date = new DateTime($request->selectedDate);
             $requestById->save();
 
             return response([
