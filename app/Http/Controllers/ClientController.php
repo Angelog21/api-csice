@@ -107,7 +107,7 @@ class ClientController extends Controller
                 if ($personalFiles->where('type','cedula')->count() == 0 || $personalFiles->where('type','Cédula')->count() == 0) {
                     $cedula = $request->file('cedula');
                     $nombreCedula = $cedula->getClientOriginalName();
-                    Storage::disk('local')->put("public/{$client->id}/{$nombreCedula}",  File::get($cedula));
+                    Storage::disk('local')->put("public/clients/{$client->id}/{$nombreCedula}",  File::get($cedula));
                     clientFile::create([
                         'client_id'=>$client->id,
                         'type'=>'Cédula',
@@ -121,7 +121,7 @@ class ClientController extends Controller
                 if ($personalFiles->where('type','RIF')->count() == 0 || $personalFiles->where('type','rif')->count() == 0) {
                     $rif = $request->file('rif');
                     $nombreRif = $rif->getClientOriginalName();
-                    Storage::disk('local')->put("public/{$client->id}/{$nombreRif}",  File::get($rif));
+                    Storage::disk('local')->put("public/clients/{$client->id}/{$nombreRif}",  File::get($rif));
                     clientFile::create([
                         'client_id'=>$client->id,
                         'type'=>'RIF',
@@ -135,7 +135,7 @@ class ClientController extends Controller
                 if ($personalFiles->where('type','nombramiento')->count() == 0 || $personalFiles->where('type','Nombramiento')->count() == 0) {
                     $nombramiento = $request->file('nombramiento');
                     $nombreNombramiento = $nombramiento->getClientOriginalName();
-                    Storage::disk('local')->put("public/{$client->id}/{$nombreNombramiento}",  File::get($nombramiento));
+                    Storage::disk('local')->put("public/clients/{$client->id}/{$nombreNombramiento}",  File::get($nombramiento));
                     ClientFile::create([
                         'client_id'=>$client->id,
                         'type'=>'Nombramiento',
@@ -162,15 +162,28 @@ class ClientController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function getFiles($clientId)
     {
-        //
+        try {
+            if (!$clientId) {
+                return response([
+                    "success"=>false,
+                    "message" => "Falta el id de la solicitud.",
+                ],400);
+            }
+
+            $data = ClientFile::where('client_id',$clientId)->get();
+
+            return response([
+                "success"=>true,
+                "data" => $data,
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message" => "Ha ocurrido un error en el servidor.",
+            ],500);
+        }
     }
 
     /**

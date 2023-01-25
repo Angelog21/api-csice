@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/get-files/{id?}',"UserController@getFiles");
     Route::post('/download-file',"UserController@downloadFile");
+    Route::post('/delete-file',"UserController@deleteFile");
 
     Route::get('/send-reminder/{id}',"ServiceRequestController@sendReminder");
 
@@ -71,6 +72,7 @@ Route::middleware('auth')->group(function () {
     //---------------------------------- CLIENTES ----------------------------------------------------
 
     Route::get('/clients/{requestId}',"ClientController@index");
+    Route::get('/clients/get-files/{requestId}',"ClientController@getFiles");
     Route::post('/clients/save-files',"ClientController@saveFiles");
 
 

@@ -271,6 +271,28 @@ class UserController extends Controller
         ],200);
     }
 
+    public function deleteFile(Request $request){
+
+        $file = $request->get('url');
+        if(Storage::disk('local')->exists($file)){
+            Storage::delete($file);
+
+            //hay que eliminar en la tabla de clientefile o user file
+
+
+            return response([
+                "success"=>true,
+                "message"=>"Positivo",
+                "data" => $file
+            ],200);
+        }
+        return response([
+            "success"=>false,
+            "message"=>"No se encontró el archivo",
+            "data" => []
+        ],200);
+    }
+
     public function deleteUser ($id = null) {
         try {
 
