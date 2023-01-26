@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClientFile;
 use App\Models\PaymentFile;
 use App\Models\ServiceRequest;
 use Illuminate\Http\Request;
@@ -273,24 +274,50 @@ class UserController extends Controller
 
     public function deleteFile(Request $request){
 
-        $file = $request->get('url');
-        if(Storage::disk('local')->exists($file)){
-            Storage::delete($file);
+        try {
+            if (!$request->get('type')) {
+                return response([
+                    "success"=>false,
+                    "message"=>"Debe enviar el tipo de archivo que se va a eliminar."
+                ],200);
+            }
 
-            //hay que eliminar en la tabla de clientefile o user file
+            $file = $request->get('url');
+            if(Storage::disk('local')->exists($file)){
+                Storage::delete($file);
 
+                //hay que eliminar en la tabla de clientefile o user file
+                if ( $request->get('type') == "user" ) {
+
+                    UserFile::where('id',$request->get('id'))->delete();
+
+                } else if ( $request->get('type') == "client" ) {
+
+                    ClientFile::where('id',$request->get('id'))->delete();
+
+                }
+
+
+
+                return response([
+                    "success"=>true,
+                    "message"=>"Positivo",
+                    "data" => $file
+                ],200);
+            }
 
             return response([
-                "success"=>true,
-                "message"=>"Positivo",
-                "data" => $file
+                "success"=>false,
+                "message"=>"No se encontró el archivo",
+                "data" => []
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error en el servidor"
             ],200);
         }
-        return response([
-            "success"=>false,
-            "message"=>"No se encontró el archivo",
-            "data" => []
-        ],200);
+
     }
 
     public function deleteUser ($id = null) {
