@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/user',"Auth\AuthController@register");
 Route::post('/saveFiles',"UserController@saveFiles");
 Route::post('/save-client',"ClientController@store");
+Route::post('/clients/save-files',"ClientController@saveFiles");
 Route::get('/restructureNewData','ServiceRequestController@scriptNewStructure');
 
 Route::middleware('auth')->group(function () {
@@ -73,7 +74,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/clients/{requestId}',"ClientController@index");
     Route::get('/clients/get-files/{requestId}',"ClientController@getFiles");
-    Route::post('/clients/save-files',"ClientController@saveFiles");
 
 
 });

@@ -54,7 +54,7 @@ class ClientController extends Controller
             if (isset($request->serviceRequestId)) {
                 $serviceRequestId = $request->serviceRequestId;
 
-                Client::create([
+                $client = Client::create([
                     "service_request_id"=>$serviceRequestId,
                     "document_type" => $request->documentType,
                     "identification_card" => $request->identificationCard,
@@ -72,6 +72,7 @@ class ClientController extends Controller
 
                 return response([
                     "success"=>true,
+                    "data"=>$client,
                     "message" => "Se ha creado el signatario correctamente.",
                 ],200);
             }else{
