@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClientFile;
 use App\Models\PaymentFile;
 use App\Models\ServiceRequest;
 use Illuminate\Http\Request;
@@ -271,11 +272,63 @@ class UserController extends Controller
         ],200);
     }
 
+    public function deleteFile(Request $request){
+
+        try {
+            if (!$request->get('type')) {
+                return response([
+                    "success"=>false,
+                    "message"=>"Debe enviar el tipo de archivo que se va a eliminar."
+                ],200);
+            }
+
+            $file = $request->get('url');
+            if(Storage::disk('local')->exists($file)){
+                Storage::delete($file);
+
+                //hay que eliminar en la tabla de clientefile o user file
+                if ( $request->get('type') == "user" ) {
+
+                    UserFile::where('id',$request->get('id'))->delete();
+
+                } else if ( $request->get('type') == "client" ) {
+
+                    ClientFile::where('id',$request->get('id'))->delete();
+
+                }
+
+
+
+                return response([
+                    "success"=>true,
+                    "message"=>"Positivo",
+                    "data" => $file
+                ],200);
+            }
+
+            return response([
+                "success"=>false,
+                "message"=>"No se encontró el archivo",
+                "data" => []
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error en el servidor"
+            ],200);
+        }
+
+    }
+
     public function deleteUser ($id = null) {
         try {
 
             PaymentFile::where('user_id',$id)->delete();
-            ServiceRequest::where('user_id',$id)->delete();
+            $servicesRequests = ServiceRequest::where('user_id',$id)->get();
+            foreach ($servicesRequests as $s) {
+                $s->services()->detach();
+                $s->delete();
+            }
             UserFile::where('user_id',$id)->delete();
             User::where('id',$id)->delete();
 
@@ -288,7 +341,7 @@ class UserController extends Controller
             return response([
                 "success"=>false,
                 "message"=>"Ocurrió un error en el servidor.",
-                "data" => $e
+                "data" => $e->getMessage()
             ],500);
         }
 
