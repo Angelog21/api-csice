@@ -301,7 +301,7 @@ class UserController extends Controller
 
                 return response([
                     "success"=>true,
-                    "message"=>"Positivo",
+                    "message"=>"Se ha eliminado el archivo correctamente",
                     "data" => $file
                 ],200);
             }
