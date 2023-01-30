@@ -123,6 +123,48 @@ class UserController extends Controller
         }
     }
 
+    public function updateUser(Request $request){
+        try {
+            if (!isset($request->id) || !isset($request->name) || !isset($request->rif) || !isset($request->social_reason)) {
+                return response([
+                    "success"=>false,
+                    "message"=>"Faltan datos para actualizar del usuario.",
+                    "data" => []
+                ],200);
+            }
+
+            $user = User::find($request->id);
+
+            if(empty($user)){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró el usuario.",
+                    "data" => []
+                ],200);
+            }
+
+            $user->name = $request->name;
+            $user->phone = $request->phone;
+            $user->rif = $request->rif;
+            $user->direction = $request->direction;
+            $user->social_reason = $request->social_reason;
+            $user->save();
+
+            return response([
+                "success"=>true,
+                "message"=>"Usuario actualizado correctamente.",
+                "data" => $user
+            ],200);
+
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ocurrió un error en el servidor.",
+                "data" => $e
+            ],500);
+        }
+    }
+
     public function saveFiles(Request $request){
         try {
             $user = User::find($request->get('user_id'));
