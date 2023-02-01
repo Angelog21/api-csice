@@ -344,6 +344,36 @@ class ServiceRequestController extends Controller
         }
     }
 
+    public function saveHour($id,Request $request){
+        try {
+            $requestById = ServiceRequest::where('id',$id)->with('user','service')->first();
+
+
+            if(!$requestById){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró la solicitud.",
+                    "data" => []
+                ],404);
+            }
+
+            $requestById->start_time = new DateTime($request->start_time);
+            $requestById->save();
+
+            return response([
+                "success"=>true,
+                "message"=>"Se ha actualizado la hora de gestión de la solicitud correctamente.",
+                "data" => $requestById,
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error al intentar cambiar la hora de la solicitud.",
+                "data" => $e,
+            ],500);
+        }
+    }
+
     public function saveClientDate($id,Request $request){
         try {
             $requestById = ServiceRequest::where('id',$id)->first();
