@@ -32,7 +32,7 @@ class ServiceRequestController extends Controller
 
             foreach ($request->services as $service) {
 
-                $servicesId = $service["service"];
+                $servicesId[] = $service["service"]["id"];
             }
 
             $findService = ServiceRequest::whereHas('services',function ($q) use ($servicesId) {
@@ -62,7 +62,7 @@ class ServiceRequestController extends Controller
 
                 $serviceRequest = ServiceRequest::create([
                     'user_id'=>Auth::user()->id,
-                    'service_id'=>$servicesId[0]["id"],
+                    'service_id'=>$servicesId[0],
                     'quantity'=>$request->quantity,
                     'price'=>$request->price,
                     'correlativo'=>$generateCorrelative,
@@ -93,7 +93,8 @@ class ServiceRequestController extends Controller
                 return response([
                     "success"=>false,
                     "message" => "Ha ocurrido un error en el servidor con la transaccion.",
-                    "error" => $e->getMessage()
+                    "error" => $e->getMessage(),
+                    "data"=>$servicesId
                 ],500);
             }
 
