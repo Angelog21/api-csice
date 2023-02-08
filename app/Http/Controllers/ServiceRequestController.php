@@ -32,7 +32,7 @@ class ServiceRequestController extends Controller
 
             foreach ($request->services as $service) {
 
-                $servicesId[] = $service["service"]["id"];
+                $servicesId[] = $service["service"];
             }
 
             $findService = ServiceRequest::whereHas('services',function ($q) use ($servicesId) {
@@ -133,7 +133,8 @@ class ServiceRequestController extends Controller
             return response([
                 "success"=>false,
                 "message" => "Ha ocurrido un error en el servidor.",
-                "error" => $e->getMessage()
+                "error" => $e->getMessage(),
+                "data" => Auth::user()
             ],500);
         }
     }
