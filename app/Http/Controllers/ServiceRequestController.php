@@ -134,7 +134,7 @@ class ServiceRequestController extends Controller
                 "success"=>false,
                 "message" => "Ha ocurrido un error en el servidor.",
                 "error" => $e->getMessage(),
-                "data" => Auth::user()
+                "data" => $servicesId
             ],500);
         }
     }
