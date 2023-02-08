@@ -32,7 +32,7 @@ class ServiceRequestController extends Controller
 
             foreach ($request->services as $service) {
 
-                $servicesId[] = $service["service"];
+                $servicesId[] = $service["id"];
             }
 
             $findService = ServiceRequest::whereHas('services',function ($q) use ($servicesId) {
