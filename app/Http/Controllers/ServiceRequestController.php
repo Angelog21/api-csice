@@ -93,8 +93,7 @@ class ServiceRequestController extends Controller
                 return response([
                     "success"=>false,
                     "message" => "Ha ocurrido un error en el servidor con la transaccion.",
-                    "error" => $e->getMessage(),
-                    "data"=>$servicesId
+                    "error" => $e->getMessage()
                 ],500);
             }
 
@@ -134,8 +133,7 @@ class ServiceRequestController extends Controller
             return response([
                 "success"=>false,
                 "message" => "Ha ocurrido un error en el servidor.",
-                "error" => $e->getMessage(),
-                "data" => $servicesId
+                "error" => $e->getMessage()
             ],500);
         }
     }
