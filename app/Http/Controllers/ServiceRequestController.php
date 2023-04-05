@@ -32,7 +32,7 @@ class ServiceRequestController extends Controller
 
             foreach ($request->services as $service) {
 
-                $servicesId[] = $service["service"];
+                $servicesId[] = $service["service"]["id"];
             }
 
             $findService = ServiceRequest::whereHas('services',function ($q) use ($servicesId) {
@@ -62,7 +62,7 @@ class ServiceRequestController extends Controller
 
                 $serviceRequest = ServiceRequest::create([
                     'user_id'=>Auth::user()->id,
-                    'service_id'=>$servicesId[0]["id"],
+                    'service_id'=>$servicesId[0],
                     'quantity'=>$request->quantity,
                     'price'=>$request->price,
                     'correlativo'=>$generateCorrelative,
@@ -133,7 +133,7 @@ class ServiceRequestController extends Controller
             return response([
                 "success"=>false,
                 "message" => "Ha ocurrido un error en el servidor.",
-                "error" => $e
+                "error" => $e->getMessage()
             ],500);
         }
     }
@@ -339,6 +339,36 @@ class ServiceRequestController extends Controller
             return response([
                 "success"=>false,
                 "message"=>"Ha ocurrido un error al intentar cambiar las fechas de la solicitud.",
+                "data" => $e,
+            ],500);
+        }
+    }
+
+    public function saveHour($id,Request $request){
+        try {
+            $requestById = ServiceRequest::where('id',$id)->with('user','service')->first();
+
+
+            if(!$requestById){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró la solicitud.",
+                    "data" => []
+                ],404);
+            }
+
+            $requestById->start_time = new DateTime($request->start_time);
+            $requestById->save();
+
+            return response([
+                "success"=>true,
+                "message"=>"Se ha actualizado la hora de gestión de la solicitud correctamente.",
+                "data" => $requestById,
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error al intentar cambiar la hora de la solicitud.",
                 "data" => $e,
             ],500);
         }
