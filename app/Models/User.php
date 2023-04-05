@@ -30,13 +30,14 @@ class User extends Authenticatable implements MustVerifyEmail,JWTSubject
         'confirmation_code',
         'email_verified_at',
         'active',
-        'password'
+        'password',
+        'user_type',
+        'doc_type'
     ];
 
     protected $appends = [
         'updated_at_real'
     ];
-
 
     /**
      * The attributes that should be hidden for arrays.
