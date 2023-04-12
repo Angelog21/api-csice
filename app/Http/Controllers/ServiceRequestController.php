@@ -258,17 +258,19 @@ class ServiceRequestController extends Controller
                 'requestService' => $requestById
             ];
 
-            Mail::send('emails.response_request', $data, function($message) use ($data,$status) {
-                $message->to($data['requestService']->user->email, $data['requestService']->user->email);
-                if($status == 'Aprobado'){
-                    $message->subject('Tu solicitud ha sido aprobada');
-
-                    $pdf = \PDF::loadView('reports.serviceRequest', $data);
-                    $message->attachData($pdf->output(), "{$data['requestService']->correlativo}.pdf");
-                }else if($status == 'Rechazado'){
-                    $message->subject('Tu solicitud ha sido rechazada');
-                }
-            });
+            if ($action != 'revisar') {
+                Mail::send('emails.response_request', $data, function($message) use ($data,$status) {
+                    $message->to($data['requestService']->user->email, $data['requestService']->user->email);
+                    if($status == 'Aprobado'){
+                        $message->subject('Tu solicitud ha sido aprobada');
+    
+                        $pdf = \PDF::loadView('reports.serviceRequest', $data);
+                        $message->attachData($pdf->output(), "{$data['requestService']->correlativo}.pdf");
+                    }else if($status == 'Rechazado'){
+                        $message->subject('Tu solicitud ha sido rechazada');
+                    }
+                });
+            }
 
             return response([
                 "success"=>true,
@@ -327,7 +329,6 @@ class ServiceRequestController extends Controller
             }
 
             $requestById->start_date = new DateTime($request->start_date);
-            $requestById->end_date = new DateTime($request->end_date);
             $requestById->save();
 
             return response([
@@ -387,7 +388,6 @@ class ServiceRequestController extends Controller
             }
             
             $requestById->start_date = new DateTime($request->selectedDate);
-            $requestById->end_date = new DateTime($request->selectedDate);
             $requestById->save();
 
             return response([
