@@ -64,10 +64,10 @@ class ClientController extends Controller
                     "state" => $request->state,
                     "municipality" => $request->municipality,
                     "direction" => $request->direction,
-                    "institution_name" => $request->institutionName,
-                    "organizational_unit" => $request->organizationalUnit,
+                    "institution_name" => $request->institutionName ? $request->institutionName : $request->names,
+                    "organizational_unit" => $request->organizationalUnit ? $request->organizationalUnit : '',
                     "phone" => $request->phone,
-                    "office_phone" => $request->officePhone
+                    "office_phone" => $request->officePhone ? $request->officePhone : ''
                 ]);
 
                 return response([
