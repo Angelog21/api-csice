@@ -31,7 +31,8 @@ class ServiceRequest extends Model
         'created_at' => 'datetime:d-m-Y',
         'updated_at' => 'datetime:d-m-Y',
         'expiration_date' => 'datetime:d-m-Y',
-        'start_date' => 'datetime:d-m-Y'
+        'start_date' => 'datetime:d-m-Y',
+        'end_date' => 'datetime:d-m-Y'
     ];
 
     public function services() {

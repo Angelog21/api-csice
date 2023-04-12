@@ -53,7 +53,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        try {
+       // try {
             $attr = $request->all();
 
             if(!isset($request->role)){
@@ -90,9 +90,9 @@ class AuthController extends Controller
             }
 
             return $this->success(["user"=>$user],"Usuario registrado correctamente debe verificar.");
-        } catch (\Exception $e) {
-            return $this->error("Ha ocurrido un error en el servidor",500,$e);
-        }
+        // } catch (\Exception $e) {
+        //     return $this->error("Ha ocurrido un error en el servidor",500,$e);
+        // }
     }
 
     /**

@@ -7,33 +7,23 @@
     a través de nuestra plataforma.
     @if ($requestService->status == 'Aprobado')
         <p>
-            Es de nuestro agrado informarle que para culminar el proceso de su solicitud es necesario que adjunte a través de nuestra plataforma de Sistema de Gestión de Servicios de Firma electrónica los archivos correspondientes, es decir, en caso de ser:
+            Es de nuestro agrado informarle que su solicitud ha sido aprobada, debe ingresar nuevamente a nuestra plataforma de Sistema de Gestión de Servicios de Firma Electrónica para que pueda culminar el proceso administrativo pertinente a su solicitud para ello es necesario que adjunte el
 
             <ul>
-                <li>
-                    Comprobante de pago en formato (png, jpeg, jpg, pdf)
-                </li>
+                <li>Comprobante de pago en formato (png, jpeg, jpg o pdf) y marque la fecha de la cita para agendar la atención del signatario.</li>
             </ul>
+
+            Una vez realizado este procedimiento por favor comuníquese a través del número de atención 0212-5358998 para que indique la hora en que asistirá el signatario a nuestras oficinas para la emisión de su certificado electrónico.
+            
+            Muy respetuosamente les recordamos que este es un tramite legal e intransferible a un tercero, por tal motivo es indispensable que el signatario este de manera presencial en la emisión de su certificado electrónico.
         </p>
     @elseif ($requestService->status == 'Creado')
         <p>
-            Es de nuestro agrado informarle que su solicitud ha sido creada, es necesario que adjunte a través de nuestra plataforma de Sistema de Gestión de Servicios de Firma electrónica los archivos correspondientes, es decir, en caso de ser:
-
-            <ul>
-                <li>
-                    Empleado Público adjuntar el RIF de la Institución, nombramiento o Gaceta y CI. del Signatario.
-                </li>
-                <li>
-                    Persona Natural adjuntar CI y RIF del signatario.
-                </li>
-                <li>
-                    Persona Jurídica adjuntar RIF de la empresa, CI del signatario y Acta Constitutiva y nombramiento
-                </li>
-            </ul>
+            Es de nuestro agrado informarle que su solicitud ha sido creada, la misma será evaluada para validar que los datos solicitados hayan sido ingresados correctamente y a su vez corroborar la carga de los archivos correspondientes a la solicitud.
         </p>
     @else
         <p>
-            Para esta ocasión su solicitud ha sido rechazada
+            Muy respetuosamente le informamos que en esta ocasión su solicitud ha sido rechazada para mayor información por favor comuníquese a través de nuestro número de atención 0212-5358998.
         </p>
     @endif
     <p>Le invitamos a seguir usando nuestra plataforma para próximos procesos de gestión y solicitudes.</p>

@@ -144,7 +144,7 @@ class ServiceRequestController extends Controller
         $myRequests = ServiceRequest::where('user_id',$user->id)->with("service","services",'files')->get();
 
         foreach ($myRequests as $value) {
-            $value->serviceName = $value->service->name;
+            $value->serviceName = 'as';
         }
 
         return response([
@@ -265,7 +265,7 @@ class ServiceRequestController extends Controller
 
                     $pdf = \PDF::loadView('reports.serviceRequest', $data);
                     $message->attachData($pdf->output(), "{$data['requestService']->correlativo}.pdf");
-                }else{
+                }else if($status == 'Rechazado'){
                     $message->subject('Tu solicitud ha sido rechazada');
                 }
             });
@@ -378,7 +378,6 @@ class ServiceRequestController extends Controller
         try {
             $requestById = ServiceRequest::where('id',$id)->first();
 
-
             if(!$requestById){
                 return response([
                     "success"=>false,
@@ -386,7 +385,7 @@ class ServiceRequestController extends Controller
                     "data" => []
                 ],404);
             }
-
+            
             $requestById->start_date = new DateTime($request->selectedDate);
             $requestById->end_date = new DateTime($request->selectedDate);
             $requestById->save();
