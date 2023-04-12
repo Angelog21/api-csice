@@ -21,8 +21,8 @@ class ServiceRequest extends Model
         "completed_at",
         "expiration_date",
         "start_date",
+        "start_time",
         "correlativo",
-        "end_date",
         "observation",
         "emailList",
     ];
@@ -32,7 +32,6 @@ class ServiceRequest extends Model
         'updated_at' => 'datetime:d-m-Y',
         'expiration_date' => 'datetime:d-m-Y',
         'start_date' => 'datetime:d-m-Y',
-        'end_date' => 'datetime:d-m-Y'
     ];
 
     public function services() {

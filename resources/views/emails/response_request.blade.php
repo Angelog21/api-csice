@@ -21,11 +21,11 @@
         <p>
             Es de nuestro agrado informarle que su solicitud ha sido creada, la misma será evaluada para validar que los datos solicitados hayan sido ingresados correctamente y a su vez corroborar la carga de los archivos correspondientes a la solicitud.
         </p>
-    @else
+    @elseif ($requestService->status == 'Rechazado')
         <p>
             Muy respetuosamente le informamos que en esta ocasión su solicitud ha sido rechazada para mayor información por favor comuníquese a través de nuestro número de atención 0212-5358998.
         </p>
-    @endif
+    @endif 
     <p>Le invitamos a seguir usando nuestra plataforma para próximos procesos de gestión y solicitudes.</p>
 </body>
 </html>
