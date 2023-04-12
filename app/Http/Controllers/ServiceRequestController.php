@@ -144,7 +144,7 @@ class ServiceRequestController extends Controller
         $myRequests = ServiceRequest::where('user_id',$user->id)->with("service","services",'files')->get();
 
         foreach ($myRequests as $value) {
-            $value->serviceName = 'as';
+            $value->serviceName = $value->service->name;
         }
 
         return response([
