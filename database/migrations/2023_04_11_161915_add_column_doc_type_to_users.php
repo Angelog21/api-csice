@@ -13,9 +13,13 @@ class AddColumnDocTypeToUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('doc_type')->nullable();
-        });
+        if (!Schema::hasColumn('users','doc_type')) //check the column
+        {
+            Schema::table('users', function (Blueprint $table) {
+                $table->string('doc_type')->nullable();
+            });
+        }
+
     }
 
     /**
