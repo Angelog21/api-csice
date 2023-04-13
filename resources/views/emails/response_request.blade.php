@@ -7,7 +7,7 @@
     a través de nuestra plataforma.
     @if ($requestService->status == 'Aprobado')
         <p>
-            Es de nuestro agrado informarle que su solicitud ha sido aprobada, debe ingresar nuevamente a nuestra plataforma de Sistema de Gestión de Servicios de Firma Electrónica para que pueda culminar el proceso administrativo pertinente a su solicitud para ello es necesario que adjunte el
+            Es de nuestro agrado informarle que su solicitud ha sido aprobada, debe ingresar nuevamente a nuestra plataforma de Sistema de Gestión de Servicios de Firma Electrónica para que pueda culminar el proceso administrativo pertinente a su solicitud para ello es necesario que adjunte:
 
             <ul>
                 <li>Comprobante de pago en formato (png, jpeg, jpg o pdf) y marque la fecha de la cita para agendar la atención del signatario.</li>
