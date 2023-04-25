@@ -174,11 +174,11 @@ class UserController extends Controller
                     "success"=>false,
                     "message"=>"No se encontró el user.",
                     "data" => []
-                ],404);
+                ], 404);
             }
 
-            $personalFiles = UserFile::where('user_id',$user->id)->get();
-
+            $personalFiles = UserFile::where('user_id', $user->id)->get();
+ 
             if ($request->file('cedula')) {
                 if ($personalFiles->where('type','cedula')->count() == 0 || $personalFiles->where('type','Cédula')->count() == 0) {
                     $cedula = $request->file('cedula');
@@ -247,7 +247,6 @@ class UserController extends Controller
                 ]);
             }
 
-
             return response([
                 "success"=>true,
                 "message"=>"Se ha guardado correctamente.",
@@ -315,7 +314,6 @@ class UserController extends Controller
     }
 
     public function deleteFile(Request $request){
-
         try {
             if (!$request->get('type')) {
                 return response([
@@ -325,21 +323,15 @@ class UserController extends Controller
             }
 
             $file = $request->get('url');
+
             if(Storage::disk('local')->exists($file)){
                 Storage::delete($file);
 
-                //hay que eliminar en la tabla de clientefile o user file
-                if ( $request->get('type') == "user" ) {
-
+                if ($request->get('type') == "user") {
                     UserFile::where('id',$request->get('id'))->delete();
-
-                } else if ( $request->get('type') == "client" ) {
-
+                } else if ($request->get('type') == "client") {
                     ClientFile::where('id',$request->get('id'))->delete();
-
                 }
-
-
 
                 return response([
                     "success"=>true,

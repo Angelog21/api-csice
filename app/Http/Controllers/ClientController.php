@@ -54,6 +54,17 @@ class ClientController extends Controller
             if (isset($request->serviceRequestId)) {
                 $serviceRequestId = $request->serviceRequestId;
 
+                $client = Client::select('identification_card')
+                    ->where('identification_card', $request->identificationCard)
+                    ->first();
+
+                if ($client) {
+                    return response([
+                        "success" => false,
+                        "message" => "El documento de identidad ya existe!",
+                    ],200);
+                }
+
                 $client = Client::create([
                     "service_request_id"=>$serviceRequestId,
                     "document_type" => $request->documentType,
@@ -105,7 +116,9 @@ class ClientController extends Controller
             $personalFiles = ClientFile::where('client_id',$client->id)->get();
 
             if ($request->file('cedula')) {
-                if ($personalFiles->where('type','cedula')->count() == 0 || $personalFiles->where('type','Cédula')->count() == 0) {
+                if ($personalFiles->where('type','cedula')->count() == 0 || 
+                    $personalFiles->where('type','Cédula')->count() == 0) {
+
                     $cedula = $request->file('cedula');
                     $nombreCedula = $cedula->getClientOriginalName();
                     Storage::disk('local')->put("public/clients/{$client->id}/{$nombreCedula}",  File::get($cedula));
@@ -113,7 +126,7 @@ class ClientController extends Controller
                         'client_id'=>$client->id,
                         'type'=>'Cédula',
                         'name'=>$nombreCedula,
-                        'url'=>"public/{$client->id}/{$nombreCedula}"
+                        'url'=>"public/clients/{$client->id}/{$nombreCedula}"
                     ]);
                 }
             }
@@ -127,7 +140,7 @@ class ClientController extends Controller
                         'client_id'=>$client->id,
                         'type'=>'RIF',
                         'name'=>$nombreRif,
-                        'url'=>"public/{$client->id}/{$nombreRif}"
+                        'url'=>"public/clients/{$client->id}/{$nombreRif}"
                     ]);
                 }
             }
@@ -141,12 +154,11 @@ class ClientController extends Controller
                         'client_id'=>$client->id,
                         'type'=>'Nombramiento',
                         'name'=>$nombreNombramiento,
-                        'url'=>"public/{$client->id}/{$nombreNombramiento}"
+                        'url'=>"public/clients/{$client->id}/{$nombreNombramiento}"
                     ]);
                 }
             }
-
-
+            
             return response([
                 "success"=>true,
                 "message"=>"Se ha guardado correctamente.",
