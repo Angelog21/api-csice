@@ -26,7 +26,10 @@ class AddColumnUserTypeToUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('user_type');
+            if (Schema::hasColumn('users','user_type')) //check the column
+            {
+                $table->dropColumn('user_type');
+            }
         });
     }
 }
