@@ -20,7 +20,6 @@ class CreateServicesTable extends Migration
             $table->string("code");
             $table->float("iva_value");
             $table->float("petro_quantity");
-            $table->string("service_to");
             $table->timestamps();
         });
     }
