@@ -148,6 +148,7 @@ class UserController extends Controller
             $user->rif = $request->rif;
             $user->direction = $request->direction;
             $user->social_reason = $request->social_reason;
+            $user->doc_type = $request->doc_type;
             $user->save();
 
             return response([
@@ -178,7 +179,7 @@ class UserController extends Controller
             }
 
             $personalFiles = UserFile::where('user_id', $user->id)->get();
- 
+
             if ($request->file('cedula')) {
                 if ($personalFiles->where('type','cedula')->count() == 0 || $personalFiles->where('type','Cédula')->count() == 0) {
                     $cedula = $request->file('cedula');
