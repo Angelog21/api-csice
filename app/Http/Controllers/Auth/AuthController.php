@@ -71,7 +71,7 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $attr['name'],
                 'social_reason' => $attr['social_reason'],
-                'user_type' => isset($attr['type_user']) ? $attr['type_user'] : 'csice',
+                'user_type' => isset($attr['type_user']) ? $attr['type_user'] : $attr['doc_type'],
                 'doc_type' => $attr['doc_type'],
                 'phone' => $attr['phone'],
                 'rif' => $attr['rif'],

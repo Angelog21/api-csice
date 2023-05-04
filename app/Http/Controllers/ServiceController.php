@@ -15,8 +15,8 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        if (isset(Auth::user()->user_type)) {
-            $services = Service::where('service_to',Auth::user()->user_type)->get();
+        if (isset(Auth::user()->doc_type)) {
+            $services = Service::where('service_to',Auth::user()->doc_type)->get();
         }else{
             $services = Service::all();
         }
