@@ -167,7 +167,7 @@
                 {{$requestService->status}}
               </h3>
             @endif
-            @if ($requestService->status == 'Aprobado')
+            @if ($requestService->status == 'Aprobado' || $requestService->status == 'Revisado')
               <h3 style="color:green; font-size: 18px">
                 {{$requestService->status}}
               </h3>
