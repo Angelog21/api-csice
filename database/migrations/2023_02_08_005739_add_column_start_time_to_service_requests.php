@@ -14,7 +14,7 @@ class AddColumnStartTimeToServiceRequests extends Migration
     public function up()
     {
         Schema::table('service_requests', function (Blueprint $table) {
-            $table->date('start_time')->nullable();
+            $table->timestamp('start_time')->nullable();
         });
     }
 
