@@ -162,7 +162,7 @@
         </tr>
         <tr>
           <td>
-            @if ($requestService->status == 'Creado' && $requestService->status == 'Revisado')
+            @if ($requestService->status == 'Creado' || $requestService->status == 'Revisado')
               <h3 style="color:blue; font-size: 18px">
                 {{$requestService->status}}
               </h3>
