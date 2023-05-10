@@ -148,9 +148,23 @@ class ServiceRequestController extends Controller
         }
 
         return response([
-            "success"=>true,
+            "success" => true,
             "data" => $myRequests
-        ],200);
+        ], 200);
+    }
+
+    public function serviceRequestActive(){
+        $user = auth()->user();
+
+        $myRequests = ServiceRequest::where('user_id',$user->id)
+            ->where('status','!=','Rechazado')
+            ->where('status','!=','Completado')
+            ->count();
+
+        return response([
+            "success" => true,
+            "data" => $myRequests
+        ], 200);
     }
 
     public function requestByReview(){

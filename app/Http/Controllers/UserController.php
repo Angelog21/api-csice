@@ -149,6 +149,8 @@ class UserController extends Controller
             $user->direction = $request->direction;
             $user->social_reason = $request->social_reason;
             $user->doc_type = $request->doc_type;
+            $user->user_type = $request->doc_type;
+
             $user->save();
 
             return response([
