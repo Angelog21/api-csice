@@ -161,7 +161,23 @@
           <th>ESTADO DE LA SOLICITUD</th>
         </tr>
         <tr>
-          <td><h3 style="color:blue;font-size:14px">{{$requestService->status}}</h3></td>
+          <td>
+            @if ($requestService->status == 'Creado' || $requestService->status == 'Revisado')
+              <h3 style="color:blue; font-size: 18px">
+                {{$requestService->status}}
+              </h3>
+            @endif
+            @if ($requestService->status == 'Aprobado' || $requestService->status == 'Completado')
+              <h3 style="color:green; font-size: 18px">
+                {{$requestService->status}}
+              </h3>
+            @endif
+            @if ($requestService->status == 'Rechazado')
+              <h3 style="color:red; font-size: 18px">
+                {{$requestService->status}}
+              </h3>
+            @endif
+          </td>
         </tr>
       </table>
     </div>

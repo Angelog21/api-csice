@@ -28,10 +28,11 @@ class ServiceRequest extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime:d-m-Y',
-        'updated_at' => 'datetime:d-m-Y',
+        'created_at' => 'datetime:d-m-Y H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
         'expiration_date' => 'datetime:d-m-Y',
         'start_date' => 'datetime:d-m-Y',
+        'start_time' => 'datetime:d-m-Y H:i:s',
     ];
 
     public function services() {

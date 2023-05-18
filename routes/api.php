@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/requests/review','ServiceRequestController@requestByReview')->middleware('isNotClient');
     Route::get('/requests/by-status/{:status}','ServiceRequestController@getRequestsByStatus')->middleware('isNotClient');
     Route::get('/requests/save/{action}/{id}','ServiceRequestController@saveResponse')->middleware('isNotClient');
+    Route::get('/requests/active','ServiceRequestController@serviceRequestActive');
 
     //-----------------------ESTADISTICAS-----------------------
     Route::get('/statistics/cardsUpper','StatisticsController@cardsUpper')->middleware('isNotClient');

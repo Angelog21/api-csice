@@ -41,7 +41,7 @@ class ServiceRequestController extends Controller
             ->where('user_id',Auth::user()->id)
             ->where('status', '!=', 'Completado')->get();
 
-            if($findService->where('status','!=','Rechazado')->count() > 0){
+            if($findService->where('status','!=','Rechazado')->count() > 0 && $findService->where('status','!=','Completado')->count() > 0){
                 return response([
                     "success"=>false,
                     "message" => "Ya tiene una solicitud con este servicio en proceso."
@@ -148,9 +148,23 @@ class ServiceRequestController extends Controller
         }
 
         return response([
-            "success"=>true,
+            "success" => true,
             "data" => $myRequests
-        ],200);
+        ], 200);
+    }
+
+    public function serviceRequestActive(){
+        $user = auth()->user();
+
+        $myRequests = ServiceRequest::where('user_id',$user->id)
+            ->where('status','!=','Rechazado')
+            ->where('status','!=','Completado')
+            ->count();
+
+        return response([
+            "success" => true,
+            "data" => $myRequests
+        ], 200);
     }
 
     public function requestByReview(){
@@ -207,7 +221,8 @@ class ServiceRequestController extends Controller
         $user = auth()->user();
 
         $requestsByResponse = ServiceRequest::where('status','Aprobado')
-        ->with("services","user","files")->get();
+            ->with("services","user","files")
+            ->get();
 
         foreach ($requestsByResponse as $value) {
             $value->serviceName = $value->service->name;

@@ -28,7 +28,7 @@ class ClientController extends Controller
                 ],400);
             }
 
-            $data = Client::where('service_request_id',$serviceRequestId)->get();
+            $data = Client::where('service_request_id', $serviceRequestId)->get();
 
             return response([
                 "success"=>true,
