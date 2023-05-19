@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServicesTable extends Migration
+class CreateClientFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateServicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('client_files', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->string("unit");
-            $table->string("code");
-            $table->float("iva_value");
-            $table->float("petro_quantity");
+            $table->foreignId('client_id')->constrained();
+            $table->string('type');
+            $table->string('name');
+            $table->text('url');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateServicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('client_files');
     }
 }

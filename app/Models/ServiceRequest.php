@@ -21,17 +21,18 @@ class ServiceRequest extends Model
         "completed_at",
         "expiration_date",
         "start_date",
+        "start_time",
         "correlativo",
-        "end_date",
         "observation",
         "emailList",
     ];
 
     protected $casts = [
-        'created_at' => 'datetime:d-m-Y',
-        'updated_at' => 'datetime:d-m-Y',
+        'created_at' => 'datetime:d-m-Y H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
         'expiration_date' => 'datetime:d-m-Y',
-        'start_date' => 'datetime:d-m-Y'
+        'start_date' => 'datetime:d-m-Y',
+        'start_time' => 'datetime:d-m-Y H:i:s',
     ];
 
     public function services() {
@@ -44,6 +45,10 @@ class ServiceRequest extends Model
 
     public function user() {
         return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function clients() {
+        return $this->hasMany(Client::class);
     }
 
     public function files() {

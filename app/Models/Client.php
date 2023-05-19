@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{
-    Model,
-    SoftDeletes
+    Model
 };
 
 class Client extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         "service_request_id",
@@ -32,4 +31,12 @@ class Client extends Model
         'created_at' => 'datetime:d-m-Y',
         'updated_at' => 'datetime:d-m-Y'
     ];
+
+    public function files(){
+        return $this->hasMany(ClientFile::class);
+    }
+
+    public function ServiceRequest () {
+        return $this->belongsTo(ServiceRequest::class,'service_request_id');
+    }
 }

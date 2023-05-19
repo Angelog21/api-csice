@@ -30,7 +30,13 @@ class User extends Authenticatable implements MustVerifyEmail,JWTSubject
         'confirmation_code',
         'email_verified_at',
         'active',
-        'password'
+        'password',
+        'user_type',
+        'doc_type'
+    ];
+
+    protected $appends = [
+        'updated_at_real'
     ];
 
     /**
@@ -70,5 +76,10 @@ class User extends Authenticatable implements MustVerifyEmail,JWTSubject
 
     public function files(){
         return $this->hasMany(UserFile::class);
+    }
+
+    
+    public function getUpdatedAtRealAttribute() {
+        return $this['updated_at_real'] = $this->updated_at;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Service;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceController extends Controller
 {
@@ -14,7 +15,11 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $services = Service::all();
+        if (isset(Auth::user()->doc_type)) {
+            $services = Service::where('service_to',Auth::user()->doc_type)->get();
+        }else{
+            $services = Service::all();
+        }
 
         foreach($services as $service){
             $service->iva_value = $service->iva_value*100;

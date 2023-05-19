@@ -17,7 +17,7 @@ class CreateClientsTable extends Migration
             $table->id();
             $table->bigInteger('service_request_id');
             $table->string('document_type');
-            $table->string('identification_card')->unique();
+            $table->string('identification_card');
             $table->string('email');
             $table->string('names');
             $table->string('surnames');
