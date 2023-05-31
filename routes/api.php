@@ -77,6 +77,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/clients/{requestId}',"ClientController@index");
     Route::get('/clients/get-files/{requestId}',"ClientController@getFiles");
+    Route::delete('/clients/{clientId}',"ClientController@destroy");
 
 
 });
