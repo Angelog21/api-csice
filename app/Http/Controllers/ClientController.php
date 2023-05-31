@@ -116,7 +116,7 @@ class ClientController extends Controller
             $personalFiles = ClientFile::where('client_id',$client->id)->get();
 
             if ($request->file('cedula')) {
-                if ($personalFiles->where('type','cedula')->count() == 0 || 
+                if ($personalFiles->where('type','cedula')->count() == 0 ||
                     $personalFiles->where('type','Cédula')->count() == 0) {
 
                     $cedula = $request->file('cedula');
@@ -158,7 +158,7 @@ class ClientController extends Controller
                     ]);
                 }
             }
-            
+
             return response([
                 "success"=>true,
                 "message"=>"Se ha guardado correctamente.",
@@ -219,6 +219,22 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+
+            ClientFile::where('client_id',$id)->delete();
+            Client::where('id',$id)->delete();
+
+            return response([
+                "success"=>true,
+                "message"=>"Usuario Eliminado correctamente.",
+                "data" => []
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ocurrió un error en el servidor.",
+                "data" => $e->getMessage()
+            ],500);
+        }
     }
 }
