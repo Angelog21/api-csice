@@ -341,6 +341,18 @@ class UserController extends Controller
                     "message"=>"Se ha eliminado el archivo correctamente",
                     "data" => $file
                 ],200);
+            } else {
+                if ($request->get('type') == "user") {
+                    UserFile::where('id',$request->get('id'))->delete();
+                } else if ($request->get('type') == "client") {
+                    ClientFile::where('id',$request->get('id'))->delete();
+                }
+
+                return response([
+                    "success"=>true,
+                    "message"=>"Se ha eliminado el archivo correctamente",
+                    "data" => $file
+                ],200);
             }
 
             return response([

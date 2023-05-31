@@ -25,7 +25,7 @@ class ClientController extends Controller
                 return response([
                     "success"=>false,
                     "message" => "Falta el id de la solicitud.",
-                ],400);
+                ], 400);
             }
 
             $data = Client::where('service_request_id', $serviceRequestId)->get();
@@ -53,17 +53,6 @@ class ClientController extends Controller
         try {
             if (isset($request->serviceRequestId)) {
                 $serviceRequestId = $request->serviceRequestId;
-
-                $client = Client::select('identification_card')
-                    ->where('identification_card', $request->identificationCard)
-                    ->first();
-
-                if ($client) {
-                    return response([
-                        "success" => false,
-                        "message" => "El documento de identidad ya existe!",
-                    ],200);
-                }
 
                 $client = Client::create([
                     "service_request_id"=>$serviceRequestId,
