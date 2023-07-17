@@ -80,7 +80,18 @@
           </tr>
           <tr>
             <td><b>{{$requestService->user->social_reason}}</b></td>
-            <td><b>{{$requestService->user->rif}}</b></td>
+            <td>
+              <b>
+                @if ($requestService->user->doc_type == 'n')
+                  <span>V-</span>
+                @elseif($requestService->user->doc_type == 'j')
+                  <span>J-</span>
+                @elseif($requestService->user->doc_type == 'ep')
+                  <span>G-</span>
+                @endif
+              {{$requestService->user->rif}}
+              </b>
+            </td>
             <td><b>{{$requestService->user->phone}}</b></td>
           </tr>
       </table>
