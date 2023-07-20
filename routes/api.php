@@ -20,6 +20,7 @@ Route::post('/saveFiles',"UserController@saveFiles");
 Route::post('/save-client',"ClientController@store");
 Route::post('/clients/save-files',"ClientController@saveFiles");
 Route::get('/restructureNewData','ServiceRequestController@scriptNewStructure');
+Route::get('/users/getByRequest/{id}','UserController@getUserByRequest');
 
 Route::middleware('auth')->group(function () {
 
@@ -29,7 +30,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users','UserController@getUsers')->middleware('isNotClient');
     Route::get('/users/destroy/{id}','UserController@deleteUser')->middleware('isAdminOrDirector');
-    Route::get('/users/getByRequest/{id}','UserController@getUserByRequest');
     Route::get('/users/{status}/{id}','UserController@setStatusUser')->middleware('isNotClient');
     Route::post('/users/updateRole','UserController@setRoleUser')->middleware('isNotClient');
     Route::post('/users/updateUser','UserController@updateUser');
