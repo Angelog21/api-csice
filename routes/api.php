@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{status}/{id}','UserController@setStatusUser')->middleware('isNotClient');
     Route::post('/users/updateRole','UserController@setRoleUser')->middleware('isNotClient');
     Route::post('/users/updateUser','UserController@updateUser');
+    Route::get('/users/getByRequest/{id}','UserController@getUserByRequest');
     Route::get('serviceRequest/download/{id}', 'ServiceRequestController@downloadRequestService');
 
     //-----------------SERVICIOS--------------------
