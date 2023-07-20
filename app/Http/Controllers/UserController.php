@@ -407,7 +407,7 @@ class UserController extends Controller
                 ],200);
             }
 
-            $serviceRequest = ServiceRequest::where('id',$id)->with('user')->get();
+            $serviceRequest = ServiceRequest::where('id',$requestId)->with('user')->get();
 
             return response([
                 "success"=>true,
