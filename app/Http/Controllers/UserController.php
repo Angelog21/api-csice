@@ -395,4 +395,31 @@ class UserController extends Controller
         }
 
     }
+
+    public function getUserByRequest ($requestId = null) {
+        try {
+
+            if ( !isset($requestId) ) {
+                return response([
+                    "success"=>false,
+                    "message"=>"Se necesita el id de la solicitud.",
+                    "data" => []
+                ],200);
+            }
+
+            $serviceRequest = ServiceRequest::where('id',$requestId)->with('user')->get();
+
+            return response([
+                "success"=>true,
+                "data" => $serviceRequest[0]->user
+            ],200);
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ocurrió un error en el servidor.",
+                "data" => $e->getMessage()
+            ],500);
+        }
+
+    }
 }

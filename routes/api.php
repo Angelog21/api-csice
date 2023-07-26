@@ -20,6 +20,7 @@ Route::post('/saveFiles',"UserController@saveFiles");
 Route::post('/save-client',"ClientController@store");
 Route::post('/clients/save-files',"ClientController@saveFiles");
 Route::get('/restructureNewData','ServiceRequestController@scriptNewStructure');
+Route::get('/users/getByRequest/{id}','UserController@getUserByRequest');
 
 Route::middleware('auth')->group(function () {
 
