@@ -217,7 +217,7 @@
       </div>
     @endif
 
-    @if($requestService->user->id !== 4)
+    @if($requestService->user->id !== 366)
     <div style="margin-top:80px;width:703px; text-align:center;">
       <h3>Condiciones de la oferta</h3>
       <table style="margin-top:10px" border="1">
