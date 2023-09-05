@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/petro',"PetroController@getPetroPrice");
 
 Route::post('/user',"Auth\AuthController@register");
 Route::post('/saveFiles',"UserController@saveFiles");
@@ -80,5 +81,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/clients/get-files/{requestId}',"ClientController@getFiles");
     Route::get('/clients/destroy/{clientId}',"ClientController@destroy");
 
+    //--------------------------------PRECIO PETRO------------------
+    Route::post('/petro',"PetroController@updatePetroPrice");
 
 });
