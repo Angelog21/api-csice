@@ -26,6 +26,7 @@ class PetroController extends Controller
     }
 
     public function updatePetroPrice(Request $request){
+
         try {
 
             $petro = Petro::first();
