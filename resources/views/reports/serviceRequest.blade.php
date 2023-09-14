@@ -156,6 +156,7 @@
             <th style="min-width: 100px">SERVICIO</th>
             <th>CANTIDAD DE PETROS</th>
             <th>CANTIDAD SOLICITADA</th>
+            <th>PRECIO_UNITARIO</th>
             <th>SUBTOTAL</th>
             <th>IVA</th>
             <th>TOTAL</th>
@@ -165,9 +166,10 @@
                 <td><b>{{$service->name}}</b></td>
                 <td><b>{{$service->pivot->petro_quantity}}</b></td>
                 <td><b>{{$service->pivot->quantity}}</b></td>
-                <td><b>{{number_format($service->pivot->subtotal,2,'.',',')}} Bs.S</b></td>
-                <td><b>{{number_format($service->pivot->iva,2,'.',',')}} Bs.S</b></td>
-                <td><b>{{number_format($service->pivot->total,2,'.',',')}} Bs.S</b></td>
+                <td><b>{{number_format(($service->pivot->subtotal/$service->pivot->quantity),2,'.',',')}} Bs.</b></td>
+                <td><b>{{number_format($service->pivot->subtotal,2,'.',',')}} Bs.</b></td>
+                <td><b>{{number_format($service->pivot->iva,2,'.',',')}} Bs.</b></td>
+                <td><b>{{number_format($service->pivot->total,2,'.',',')}} Bs.</b></td>
             </tr>
         @endforeach
       </table>
