@@ -130,10 +130,10 @@ class AuthController extends Controller
 
         $credentials["email"] = strtolower($credentials["email"]);
 
-        $status = User::where('email',$credentials["email"])->first();
+        $user = User::where('email',$credentials["email"])->first();
 
-        if($status){
-            if($status->active == 0){
+        if($user){
+            if($user->active == 0){
                 return response()->json([
                     "error"=>true,
                     "message"=>"El usuario se encuentra inactivo en estos momentos."
@@ -149,13 +149,28 @@ class AuthController extends Controller
         try {
             //si no se crea el token
             if (!$token = JWTAuth::attempt($credentials)) {
+                if ($user->max_attemps >= 5) {
+                    $user->active == 0;
+
+                    return response()->json(["error"=>true,
+                                        "message"=>"Se ha inactivado el usuario por el intento máximo de iniciar sesión, por favor comuníquese con el departamento de soporte."]);
+                }
+
+                $user->max_attemps++;
+                $user->save();
+
+                $attemps = 5 - $user->max_attemps;
+
                 return response()->json(["error"=>true,
-                                        "message"=>"Las credenciales son incorrectas"]);
+                                        "message"=>"Las credenciales son incorrectas tiene un total de {$attemps} intentos."]);
             }
         } catch (JWTException $e) {
             return response()->json(['error' => 'Ha ocurrido un error en el servidor'], 500);
         }
 
+        $user->max_attemps = 0;
+        $user->save();
+        
         $user = Auth::user();
         return response()->json(["user"=>$user,"token"=>$token]);
 
