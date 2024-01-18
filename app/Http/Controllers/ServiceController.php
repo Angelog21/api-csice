@@ -58,7 +58,7 @@ class ServiceController extends Controller
             ],200);
         }
 
-        $findService = Service::where('code',$request->code)->orWhere('name',$request->name)->get();
+        $findService = Service::where('code',$request->code)->get();
 
         if($findService->count() > 0){
             return response([
