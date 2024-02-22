@@ -278,12 +278,17 @@ class ServiceRequestController extends Controller
                     $message->to($data['requestService']->user->email, $data['requestService']->user->email);
                     if($status == 'Aprobado'){
                         $message->subject('Tu solicitud ha sido aprobada');
-    
+
                         $pdf = \PDF::loadView('reports.serviceRequest', $data);
                         $message->attachData($pdf->output(), "{$data['requestService']->correlativo}.pdf");
                     }else if($status == 'Rechazado'){
                         $message->subject('Tu solicitud ha sido rechazada');
                     }
+                });
+            } else {
+                Mail::send('emails.review_request', $data, function($message) {
+                    $message->to('angelog211198@gmail.com', 'angelog211198@gmail.com');
+                    $message->subject('Tienes una nueva solicitud para responder');
                 });
             }
 
@@ -314,6 +319,11 @@ class ServiceRequestController extends Controller
             }
 
             $requestById->correlativo = $request['correlativo'];
+
+            if(isset($request['status'])) {
+                $requestById->status = $request['status'];
+            }
+
             $requestById->save();
 
             return response([
@@ -401,7 +411,7 @@ class ServiceRequestController extends Controller
                     "data" => []
                 ],404);
             }
-            
+
             $requestById->start_date = new DateTime($request->selectedDate);
             $requestById->save();
 
