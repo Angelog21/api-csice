@@ -287,7 +287,7 @@ class ServiceRequestController extends Controller
                 });
             } else {
                 Mail::send('emails.review_request', $data, function($message) {
-                    $message->to('angelog211198@gmail.com', 'angelog211198@gmail.com');
+                    $message->to('oriollacaballero10@gmail.com', 'oriollacaballero10@gmail.com');
                     $message->subject('Tienes una nueva solicitud para responder');
                 });
             }
