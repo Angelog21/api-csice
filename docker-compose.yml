@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8050:80"
+    volumes:
+      - .:/var/www/api-csice
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - backend
+      - db
+
+  db:
+    image: postgres
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: csice
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+
+  backend:
+    container_name: api-csice
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www/api-csice
+    ports:
+      - "9000:9000"
+    working_dir: /var/www/api-csice
+
+  frontend:
+    container_name: csice
+    build:
+      context: ../csice
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    volumes:
+      - ../csice:/app
+    ports:
+      - "9001:8080"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgAdmin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: angelog211198@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+
