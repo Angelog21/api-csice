@@ -72,7 +72,7 @@ class AuthController extends Controller
                 'name' => $attr['name'],
                 'social_reason' => $attr['social_reason'],
                 'user_type' => isset($attr['type_user']) ? $attr['type_user'] : 'V',
-                'doc_type' => isset($attr['doc_type']) ? $attr['doc_type'] : 'V',
+                'doc_type' => isset($attr['doc_type']) ? $attr['doc_type'] : 'n',
                 'phone' => $attr['phone'],
                 'rif' => $attr['rif'],
                 'direction' => $attr['direction'],
