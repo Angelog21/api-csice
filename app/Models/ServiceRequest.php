@@ -54,4 +54,8 @@ class ServiceRequest extends Model
     public function files() {
         return $this->hasMany(PaymentFile::class,"service_requests_id");
     }
+
+    public function signedFiles() {
+        return $this->hasMany(SignedFile::class,"service_requests_id");
+    }
 }

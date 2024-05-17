@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PivotServiceRequest;
 use App\Models\ServiceRequest;
+use App\Models\SignedFile;
 use App\Models\User;
 use App\Traits\CustomEncript;
 use App\Traits\GenerateCorrelative;
@@ -306,6 +307,36 @@ class ServiceRequestController extends Controller
         }
     }
 
+    public function saveFiles(Request $request){
+        try {
+
+            if($request->file('signedFile')){
+                $signedFile = $request->file('signedFile');
+                $nameFile = $signedFile->getClientOriginalName();
+                Storage::disk('local')->put("public/{$request->get('service_request_id')}/archivos_firmados/{$nameFile}",  File::get($signedFile));
+                SignedFile::create([
+                    'type'=>$user->id,
+                    'service_requests_id'=>$request->get('service_request_id'),
+                    'name'=>$nameFile,
+                    'url'=>"public/{$request->get('service_request_id')}/archivos_firmados/{$nameFile}"
+                ]);
+            }
+
+            return response([
+                "success"=>true,
+                "message"=>"Se ha guardado el archivo correctamente.",
+                "data" => []
+            ],200);
+
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ocurrió un error en el servidor.",
+                "data" => $e->getMessage()
+            ],500);
+        }
+    }
+
     public function updateCorrelative(Request $request){
         try {
             $requestById = ServiceRequest::where('id',$request['id'])->with('user','service',"services")->first();
@@ -429,6 +460,40 @@ class ServiceRequestController extends Controller
         }
     }
 
+    public function generateToSignFile($id)
+    {
+        try {
+            $requestService = ServiceRequest::where('id', $id)->with('service',"services",'user')->first();
+
+            if(!$requestService){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró el registro.",
+                    "data" => [],
+                ],404);
+            }
+
+            $data = [
+                'requestService' => $requestService
+            ];
+
+            $pdf = \PDF::loadView('reports.serviceRequest', $data);
+
+
+            return response([
+                "success"=>true,
+                "data" => 'data:application/pdf;base64,'.base64_encode($pdf->stream())
+            ],200);
+
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error al intentar descargar el reporte de la solicitud.",
+                "data" => $e,
+            ],500);
+        }
+    }
+
     public function downloadRequestService($id)
     {
         try {
@@ -456,7 +521,35 @@ class ServiceRequestController extends Controller
                 'requestService' => $requestService
             ];
 
-            $pdf = \PDF::loadView('reports.serviceRequest', $data);
+            if ($requestService->status == 'Aprobado') {
+                $file = $request->get('url');
+
+                if(Storage::disk('local')->exists($file)){
+                    $file = base64_encode(Storage::get($file));
+                    $imgdata = base64_decode($file);
+
+                    $f = finfo_open();
+                    $mime_type = finfo_buffer($f, $imgdata, FILEINFO_MIME_TYPE);
+
+                    $file = "data:{$mime_type};base64,".$file;
+
+                    return response([
+                        "success"=>true,
+                        "message"=>"Positivo",
+                        "data" => $file
+                    ],200);
+
+                } else {
+
+                    return response([
+                        "success"=>false,
+                        "message" => "No se ha encontrado el archivo"
+                    ],404);
+                }
+            }else {
+                $pdf = \PDF::loadView('reports.serviceRequest', $data);
+            }
+
 
             return response([
                 "success"=>true,
