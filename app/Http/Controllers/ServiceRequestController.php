@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Stmt\TryCatch;
+use \Illuminate\Support\Facades\Storage;
+use \Illuminate\Support\Facades\File;
+
+
 
 class ServiceRequestController extends Controller
 {
@@ -315,7 +319,7 @@ class ServiceRequestController extends Controller
                 $nameFile = $signedFile->getClientOriginalName();
                 Storage::disk('local')->put("public/{$request->get('service_request_id')}/archivos_firmados/{$nameFile}",  File::get($signedFile));
                 SignedFile::create([
-                    'type'=>$user->id,
+                    'type'=>'Approved',
                     'service_requests_id'=>$request->get('service_request_id'),
                     'name'=>$nameFile,
                     'url'=>"public/{$request->get('service_request_id')}/archivos_firmados/{$nameFile}"
@@ -325,7 +329,6 @@ class ServiceRequestController extends Controller
             return response([
                 "success"=>true,
                 "message"=>"Se ha guardado el archivo correctamente.",
-                "data" => []
             ],200);
 
         } catch (\Exception $e) {
@@ -474,7 +477,8 @@ class ServiceRequestController extends Controller
             }
 
             $data = [
-                'requestService' => $requestService
+                'requestService' => $requestService,
+                'newStatus' => 'Aprobado y firmado'
             ];
 
             $pdf = \PDF::loadView('reports.serviceRequest', $data);
@@ -497,7 +501,7 @@ class ServiceRequestController extends Controller
     public function downloadRequestService($id)
     {
         try {
-            $requestService = ServiceRequest::where('id', $id)->with('service',"services",'user')->first();
+            $requestService = ServiceRequest::where('id', $id)->with('service',"services",'user','signedFiles')->first();
 
             if(!$requestService){
                 return response([
@@ -521,8 +525,8 @@ class ServiceRequestController extends Controller
                 'requestService' => $requestService
             ];
 
-            if ($requestService->status == 'Aprobado') {
-                $file = $request->get('url');
+            if ($requestService->status == 'Aprobado' && count($requestService->signedFiles)) {
+                $file = $requestService->signedFiles[0]->url;
 
                 if(Storage::disk('local')->exists($file)){
                     $file = base64_encode(Storage::get($file));
@@ -531,7 +535,7 @@ class ServiceRequestController extends Controller
                     $f = finfo_open();
                     $mime_type = finfo_buffer($f, $imgdata, FILEINFO_MIME_TYPE);
 
-                    $file = "data:{$mime_type};base64,".$file;
+                    $file = "data:application/pdf;base64,".$file;
 
                     return response([
                         "success"=>true,

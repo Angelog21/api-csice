@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/requests/by-status/{:status}','ServiceRequestController@getRequestsByStatus')->middleware('isNotClient');
     Route::get('/requests/save/{action}/{id}','ServiceRequestController@saveResponse')->middleware('isNotClient');
     Route::get('/requests/active','ServiceRequestController@serviceRequestActive');
-    Route::post('/requests/generate-to-sign-file',"ServiceRequestController@generateToSignFile");
+    Route::get('/requests/generate-to-sign-file/{id}',"ServiceRequestController@generateToSignFile");
     Route::post('/requests/save-sign-file',"ServiceRequestController@saveFiles");
 
 
