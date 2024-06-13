@@ -6,7 +6,7 @@ services:
     ports:
       - "8050:80"
     volumes:
-      - .:/var/www/api-csice
+      - .:/var/www/html/api-csice
       - ./nginx/conf.d/:/etc/nginx/conf.d/
     depends_on:
       - backend
@@ -24,26 +24,14 @@ services:
 
   backend:
     container_name: api-csice
-    build: 
+    build:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ./:/var/www/api-csice
+      - ./:/var/www/html/api-csice
     ports:
       - "9000:9000"
-    working_dir: /var/www/api-csice
-
-  frontend:
-    container_name: csice
-    build:
-      context: ../csice
-      dockerfile: Dockerfile
-    depends_on:
-      - backend
-    volumes:
-      - ../csice:/app
-    ports:
-      - "9001:8080"
+    working_dir: /var/www/html/api-csice
 
   pgadmin:
     image: dpage/pgadmin4
