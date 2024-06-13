@@ -71,8 +71,8 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $attr['name'],
                 'social_reason' => $attr['social_reason'],
-                'user_type' => isset($attr['type_user']) ? $attr['type_user'] : $attr['doc_type'],
-                'doc_type' => $attr['doc_type'],
+                'user_type' => isset($attr['type_user']) ? $attr['type_user'] : 'V',
+                'doc_type' => isset($attr['doc_type']) ? $attr['doc_type'] : 'n',
                 'phone' => $attr['phone'],
                 'rif' => $attr['rif'],
                 'direction' => $attr['direction'],
@@ -170,7 +170,7 @@ class AuthController extends Controller
 
         $user->max_attemps = 0;
         $user->save();
-        
+
         $user = Auth::user();
         return response()->json(["user"=>$user,"token"=>$token]);
 

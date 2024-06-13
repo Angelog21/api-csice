@@ -14,7 +14,7 @@
             </ul>
 
             Una vez realizado este procedimiento por favor comuníquese a través del número de atención 0212-5358998 para que indique la hora en que asistirá el signatario a nuestras oficinas para la emisión de su certificado electrónico.
-            
+
             Muy respetuosamente les recordamos que este es un tramite legal e intransferible a un tercero, por tal motivo es indispensable que el signatario este de manera presencial en la emisión de su certificado electrónico.
         </p>
     @elseif ($requestService->status == 'Creado')
@@ -25,7 +25,7 @@
         <p>
             Muy respetuosamente le informamos que en esta ocasión su solicitud ha sido rechazada para mayor información por favor comuníquese a través de nuestro número de atención 0212-5358998.
         </p>
-    @endif 
+    @endif
     <p>Le invitamos a seguir usando nuestra plataforma para próximos procesos de gestión y solicitudes.</p>
 </body>
 </html>

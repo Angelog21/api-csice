@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PivotServiceRequest;
 use App\Models\ServiceRequest;
+use App\Models\SignedFile;
 use App\Models\User;
 use App\Traits\CustomEncript;
 use App\Traits\GenerateCorrelative;
@@ -15,6 +16,10 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Stmt\TryCatch;
+use \Illuminate\Support\Facades\Storage;
+use \Illuminate\Support\Facades\File;
+
+
 
 class ServiceRequestController extends Controller
 {
@@ -278,12 +283,17 @@ class ServiceRequestController extends Controller
                     $message->to($data['requestService']->user->email, $data['requestService']->user->email);
                     if($status == 'Aprobado'){
                         $message->subject('Tu solicitud ha sido aprobada');
-    
+
                         $pdf = \PDF::loadView('reports.serviceRequest', $data);
                         $message->attachData($pdf->output(), "{$data['requestService']->correlativo}.pdf");
                     }else if($status == 'Rechazado'){
                         $message->subject('Tu solicitud ha sido rechazada');
                     }
+                });
+            } else {
+                Mail::send('emails.review_request', $data, function($message) {
+                    $message->to('oriollacaballero10@gmail.com', 'oriollacaballero10@gmail.com');
+                    $message->subject('Tienes una nueva solicitud para responder');
                 });
             }
 
@@ -301,6 +311,35 @@ class ServiceRequestController extends Controller
         }
     }
 
+    public function saveFiles(Request $request){
+        try {
+
+            if($request->file('signedFile')){
+                $signedFile = $request->file('signedFile');
+                $nameFile = $signedFile->getClientOriginalName();
+                Storage::disk('local')->put("public/{$request->get('service_request_id')}/archivos_firmados/{$nameFile}",  File::get($signedFile));
+                SignedFile::create([
+                    'type'=>'Approved',
+                    'service_requests_id'=>$request->get('service_request_id'),
+                    'name'=>$nameFile,
+                    'url'=>"public/{$request->get('service_request_id')}/archivos_firmados/{$nameFile}"
+                ]);
+            }
+
+            return response([
+                "success"=>true,
+                "message"=>"Se ha guardado el archivo correctamente.",
+            ],200);
+
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ocurrió un error en el servidor.",
+                "data" => $e->getMessage()
+            ],500);
+        }
+    }
+
     public function updateCorrelative(Request $request){
         try {
             $requestById = ServiceRequest::where('id',$request['id'])->with('user','service',"services")->first();
@@ -314,6 +353,11 @@ class ServiceRequestController extends Controller
             }
 
             $requestById->correlativo = $request['correlativo'];
+
+            if(isset($request['status'])) {
+                $requestById->status = $request['status'];
+            }
+
             $requestById->save();
 
             return response([
@@ -401,7 +445,7 @@ class ServiceRequestController extends Controller
                     "data" => []
                 ],404);
             }
-            
+
             $requestById->start_date = new DateTime($request->selectedDate);
             $requestById->save();
 
@@ -419,10 +463,45 @@ class ServiceRequestController extends Controller
         }
     }
 
-    public function downloadRequestService($id)
+    public function generateToSignFile($id)
     {
         try {
             $requestService = ServiceRequest::where('id', $id)->with('service',"services",'user')->first();
+
+            if(!$requestService){
+                return response([
+                    "success"=>false,
+                    "message"=>"No se encontró el registro.",
+                    "data" => [],
+                ],404);
+            }
+
+            $data = [
+                'requestService' => $requestService,
+                'newStatus' => 'Aprobado y firmado'
+            ];
+
+            $pdf = \PDF::loadView('reports.serviceRequest', $data);
+
+
+            return response([
+                "success"=>true,
+                "data" => 'data:application/pdf;base64,'.base64_encode($pdf->stream())
+            ],200);
+
+        } catch (\Exception $e) {
+            return response([
+                "success"=>false,
+                "message"=>"Ha ocurrido un error al intentar descargar el reporte de la solicitud.",
+                "data" => $e,
+            ],500);
+        }
+    }
+
+    public function downloadRequestService($id)
+    {
+        try {
+            $requestService = ServiceRequest::where('id', $id)->with('service',"services",'user','signedFiles')->first();
 
             if(!$requestService){
                 return response([
@@ -446,7 +525,35 @@ class ServiceRequestController extends Controller
                 'requestService' => $requestService
             ];
 
-            $pdf = \PDF::loadView('reports.serviceRequest', $data);
+            if ($requestService->status == 'Aprobado' && count($requestService->signedFiles)) {
+                $file = $requestService->signedFiles[0]->url;
+
+                if(Storage::disk('local')->exists($file)){
+                    $file = base64_encode(Storage::get($file));
+                    $imgdata = base64_decode($file);
+
+                    $f = finfo_open();
+                    $mime_type = finfo_buffer($f, $imgdata, FILEINFO_MIME_TYPE);
+
+                    $file = "data:application/pdf;base64,".$file;
+
+                    return response([
+                        "success"=>true,
+                        "message"=>"Positivo",
+                        "data" => $file
+                    ],200);
+
+                } else {
+
+                    return response([
+                        "success"=>false,
+                        "message" => "No se ha encontrado el archivo"
+                    ],404);
+                }
+            }else {
+                $pdf = \PDF::loadView('reports.serviceRequest', $data);
+            }
+
 
             return response([
                 "success"=>true,

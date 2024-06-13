@@ -179,20 +179,26 @@
         </tr>
         <tr>
           <td>
-            @if ($requestService->status == 'Creado' || $requestService->status == 'Revisado')
-              <h3 style="color:blue; font-size: 18px">
-                {{$requestService->status}}
-              </h3>
-            @endif
-            @if ($requestService->status == 'Aprobado' || $requestService->status == 'Completado')
+            @if (isset($newStatus))
               <h3 style="color:green; font-size: 18px">
-                {{$requestService->status}}
+                {{$newStatus}}
               </h3>
-            @endif
-            @if ($requestService->status == 'Rechazado')
-              <h3 style="color:red; font-size: 18px">
-                {{$requestService->status}}
-              </h3>
+            @else 
+              @if ($requestService->status == 'Creado' || $requestService->status == 'Revisado')
+                <h3 style="color:blue; font-size: 18px">
+                  {{$requestService->status}}
+                </h3>
+              @endif
+              @if ($requestService->status == 'Aprobado' || $requestService->status == 'Completado')
+                <h3 style="color:green; font-size: 18px">
+                  {{$requestService->status}}
+                </h3>
+              @endif
+              @if ($requestService->status == 'Rechazado')
+                <h3 style="color:red; font-size: 18px">
+                  {{$requestService->status}}
+                </h3>
+              @endif
             @endif
           </td>
         </tr>
@@ -228,7 +234,39 @@
             </tr>
         </table>
       </div>
+    @elseif (isset($newStatus))
+      <div style="margin-top:10px;width:703px; text-align:center;">
+        <h3>Datos de la respuesta</h3>
+        <table style="margin-top:10px" border="1">
+            <tr>
+              <th>APROBADO POR</th>
+            </tr>
+            <tr>
+              <td><b>Oriolla Caballero</b></td>
+            </tr>
+            <tr>
+              <td><b>JEFE DEL CENTRO DE SEGURIDAD INFORMÁTICA Y CERTIFICACIÓN ELECTRÓNICA (CSICE) </b></td>
+            </tr>
+        </table>
+      </div>
+
+      <div style="margin-top:10px;width:703px; text-align:center;">
+        <h3>Firma del solicitante</h3>
+        <table style="margin-top:10px" border="1">
+            <tr>
+              <th>POR EL CLIENTE</th>
+            </tr>
+            <tr>
+              <td style="height: 70px !important"></td>
+            </tr>
+            <tr>
+              <td><b>Por favor notificar por correo electrónico la aceptación de la presente oferta.</b></td>
+            </tr>
+        </table>
+      </div>
     @endif
+
+    
 
     @if($requestService->user->id !== 366)
     <div style="margin-top:80px;width:703px; text-align:center;">
